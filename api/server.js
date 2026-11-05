@@ -179,7 +179,7 @@ app.get("/api/invites/:id", rateLimit(), async (req, res, next) => {
   }
 });
 
-app.post("/api/invites/:id/rsvps", rateLimit({ windowMs: 300000, max: 8 }), async (req, res, next) => {
+app.post("/api/invites/:id/rsvps", rateLimit({ windowMs: 300000, max: 30 }), async (req, res, next) => {
   try {
     const exists = await pool.query("SELECT 1 FROM invitations WHERE id = $1", [req.params.id]);
     if (!exists.rowCount) return jsonError(res, 404, "not_found", "Это приглашение не найдено.");
