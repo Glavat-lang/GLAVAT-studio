@@ -84,10 +84,19 @@ async function main() {
     console.log("GLAVAT STUDIO API smoke test passed: health, create, public read, RSVP, owner dashboard.");
   } finally {
     if (created?.id && created?.ownerToken) {
-      await request("/api/invites/" + encodeURIComponent(created.id), {
-        method: "DELETE",
-        headers: { Authorization: "Bearer " + created.ownerToken }
-      }).catch((error) => console.error("Cleanup warning:", error.message));
+      try {
+        const deleted = await request("/api/invites/" + encodeURIComponent(created.id), {
+          method: "DELETE",
+          headers: { Authorization: "Bearer " + created.ownerToken }
+        });
+        assert.equal(deleted.ok, true);
+        const afterDelete = await fetch(base + "/api/invites/" + encodeURIComponent(created.id), { headers });
+        assert.equal(afterDelete.status, 404);
+        console.log("Invitation deletion verified.");
+      } catch (error) {
+        console.error("Cleanup / deletion verification failed:", error.message);
+        process.exitCode = 1;
+      }
     }
   }
 }
