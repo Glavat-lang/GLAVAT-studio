@@ -1,3 +1,4 @@
+# GitHub Pages deployment workflow — fresh publication verification
 name: Deploy GLAVAT STUDIO to GitHub Pages
 
 on:
