@@ -81,8 +81,21 @@
           <div class="field-row"><div class="field-group"><label for="eventDate">Дата</label><input id="eventDate" type="date"></div><div class="field-group"><label for="eventTime">Время</label><input id="eventTime" type="time" value="18:00"></div></div>
           <div class="field-group"><label for="eventPlace">Место встречи</label><input id="eventPlace" maxlength="100" placeholder="Адрес или название места"></div>
           <div class="field-group"><label>Настроение</label><div class="color-options"><button class="color-choice active" data-color="cream" aria-label="Кремовый"></button><button class="color-choice" data-color="rose" aria-label="Розовый"></button><button class="color-choice" data-color="wine" aria-label="Бордовый"></button><button class="color-choice" data-color="night" aria-label="Тёмный"></button></div></div>
-          <button class="button button-dark export-button" id="downloadInvite">Скачать приглашение <span>↓</span></button>
-          <p class="editor-disclaimer">Пока это демонстрационный редактор: можно настроить и скачать макет. Публикация по личной ссылке появится на следующем этапе.</p>
+          <div class="editor-actions">
+            <button class="button button-dark export-button" id="saveInvite">Сохранить черновик <span>↓</span></button>
+            <button class="button button-outline" id="createInviteLink">Создать ссылку <span>↗</span></button>
+            <button class="button button-text" id="downloadInvite">Скачать HTML <span>↓</span></button>
+          </div>
+          <div class="share-result" id="shareResult" hidden>
+            <label for="shareLink">Твоя персональная ссылка</label>
+            <div class="share-link-row"><input id="shareLink" readonly><button id="copyInviteLink" type="button">Копировать</button></div>
+            <p>Ссылка открывает именно это приглашение. Отправь её гостю.</p>
+          </div>
+          <div class="saved-invites" id="savedInvites">
+            <div class="saved-heading">СОХРАНЁННЫЕ ЧЕРНОВИКИ <span id="savedCount">0</span></div>
+            <div id="savedInviteList"><p class="empty-saved">Пока ничего не сохранено.</p></div>
+          </div>
+          <p class="editor-disclaimer">Черновики хранятся в этом браузере. Персональная ссылка содержит данные приглашения и открывается у получателя без регистрации.</p>
         </div>
         <div class="preview-side"><div class="preview-label"><span class="live-dot"></span> LIVE PREVIEW <span>ПРЕДПРОСМОТР</span></div><div class="preview-stage"><article class="live-invite theme-cream" id="liveInvite"><div class="live-top">A SPECIAL INVITATION <span>✳</span></div><div class="live-symbol">✳</div><h3 id="previewTitle">Буду рад тебя видеть!</h3><p id="previewText">Есть повод собраться и провести этот день вместе. Очень хочу разделить его с тобой!</p><div class="live-separator"></div><div class="live-meta"><span id="previewDate">ДАТА БУДЕТ ЗДЕСЬ</span><span id="previewTime">18:00</span><span id="previewPlace">МЕСТО ВСТРЕЧИ</span></div><div class="live-footer">С НЕТЕРПЕНИЕМ ЖДУ ТЕБЯ</div></article></div><div class="preview-footnote">ТАК БУДЕТ ВЫГЛЯДЕТЬ ТВОЁ ПРИГЛАШЕНИЕ</div></div>
       </div>
