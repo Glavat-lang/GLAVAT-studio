@@ -117,7 +117,7 @@
     const bytes = new TextEncoder().encode(JSON.stringify(data));
     let binary = "";
     bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
-    return btoa(binary).replace(/\\+/g, "-").replace(/\\//g, "_").replace(/=+$/g, "");
+    return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
   }
 
   function decodeInvitation(encoded) {
@@ -132,8 +132,8 @@
     if (!data || typeof data !== "object") return;
     fields.title.value = String(data.title || "").slice(0, 70);
     fields.text.value = String(data.text || "").slice(0, 500);
-    fields.date.value = /^\\d{4}-\\d{2}-\\d{2}$/.test(data.date || "") ? data.date : "";
-    fields.time.value = /^\\d{2}:\\d{2}$/.test(data.time || "") ? data.time : "";
+    fields.date.value = /^\d{4}-\d{2}-\d{2}$/.test(data.date || "") ? data.date : "";
+    fields.time.value = /^\d{2}:\d{2}$/.test(data.time || "") ? data.time : "";
     fields.place.value = String(data.place || "").slice(0, 100);
     currentTheme = themes.includes(data.theme) ? data.theme : "cream";
     document.querySelectorAll(".color-choice").forEach((button) => button.classList.toggle("active", button.dataset.color === currentTheme));
