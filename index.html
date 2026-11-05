@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Cinzel:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Lora:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Merriweather:wght@400;700&family=Oswald:wght@400;500;600;700&family=Pacifico&family=Playfair+Display:wght@400;500;600;700&family=Raleway:wght@400;500;600;700&family=Roboto+Slab:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261105-11">
+  <link rel="stylesheet" href="styles.css?v=20261105-12">
 </head>
 <body>
   <div class="announcement">GLAVAT STUDIO — СТУДИЯ ЦИФРОВЫХ ПРИГЛАШЕНИЙ</div>
@@ -91,17 +91,50 @@
             <button class="button button-text" id="downloadInvite">Скачать открытку</button>
           </div>
           <div class="share-result" id="shareResult" hidden>
-            <label for="shareLink">Твоя персональная ссылка</label>
+            <label for="shareLink">ССЫЛКА ДЛЯ ГОСТЕЙ</label>
             <div class="share-link-row"><input id="shareLink" readonly><button id="copyInviteLink" type="button">Копировать</button></div>
-            <p>Ссылка открывает именно это приглашение. Отправь её гостю.</p>
+            <p>Отправь эту ссылку гостям — они увидят открытку и смогут ответить.</p>
+            <label for="ownerLink" class="owner-link-label">ЛИЧНАЯ ССЫЛКА ОРГАНИЗАТОРА</label>
+            <div class="share-link-row"><input id="ownerLink" readonly><button id="copyOwnerLink" type="button">Копировать</button></div>
+            <p>Сохрани её отдельно. По ней можно открыть список ответов. Не пересылай гостям.</p>
           </div>
           <div class="saved-invites" id="savedInvites">
             <div class="saved-heading">СОХРАНЁННЫЕ ЧЕРНОВИКИ <span id="savedCount">0</span></div>
             <div id="savedInviteList"><p class="empty-saved">Пока ничего не сохранено.</p></div>
           </div>
+          <div class="saved-invites managed-invites" id="managedInvites">
+            <div class="saved-heading">МОИ ПРИГЛАШЕНИЯ <span id="managedCount">0</span></div>
+            <div id="managedInviteList"><p class="empty-saved">Созданные приглашения появятся здесь.</p></div>
+          </div>
+          <div class="rsvp-manager" id="organizerDashboard" hidden>
+            <div class="saved-heading">ОТВЕТЫ ГОСТЕЙ <span id="rsvpTotal">0</span></div>
+            <div id="rsvpSummary" class="rsvp-summary"></div>
+            <div id="rsvpList"><p class="empty-saved">Выбери приглашение, чтобы посмотреть ответы.</p></div>
+            <button id="deleteManagedInvite" class="button-text danger-action" type="button">Удалить приглашение</button>
+          </div>
           <p class="editor-disclaimer">Черновики хранятся в этом браузере. Персональная ссылка содержит данные приглашения и открывается у получателя без регистрации.</p>
         </div>
-        <div class="preview-side"><div class="preview-label"><span class="live-dot"></span> ЖИВОЙ ПРЕДПРОСМОТР <span>ПРЕДПРОСМОТР</span></div><div class="preview-stage"><article class="live-invite theme-cream" id="liveInvite"><div class="scene-effects" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><img id="previewPhoto" class="preview-photo" alt="Фотография для приглашения" hidden><div class="live-symbol"></div><h3 id="previewTitle">Буду рад тебя видеть!</h3><p id="previewText">Есть повод собраться и провести этот день вместе. Очень хочу разделить его с тобой!</p><div class="live-separator"></div><div class="live-meta"><span id="previewDate">ДАТА БУДЕТ ЗДЕСЬ</span><span id="previewTime">18:00</span><span id="previewPlace">МЕСТО ВСТРЕЧИ</span></div><div class="live-footer">С НЕТЕРПЕНИЕМ ЖДУ ТЕБЯ</div></article></div><div class="preview-footnote">ТАК БУДЕТ ВЫГЛЯДЕТЬ ТВОЁ ПРИГЛАШЕНИЕ</div></div>
+        <div class="preview-side"><div class="preview-label"><span class="live-dot"></span> ЖИВОЙ ПРЕДПРОСМОТР <span>ПРЕДПРОСМОТР</span></div><div class="preview-stage"><article class="live-invite theme-cream" id="liveInvite"><div class="scene-effects" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><img id="previewPhoto" class="preview-photo" alt="Фотография для приглашения" hidden><div class="live-symbol"></div><h3 id="previewTitle">Буду рад тебя видеть!</h3><p id="previewText">Есть повод собраться и провести этот день вместе. Очень хочу разделить его с тобой!</p><div class="live-separator"></div><div class="live-meta"><span id="previewDate">ДАТА БУДЕТ ЗДЕСЬ</span><span id="previewTime">18:00</span><span id="previewPlace">МЕСТО ВСТРЕЧИ</span></div><div class="live-footer">С НЕТЕРПЕНИЕМ ЖДУ ТЕБЯ</div></article></div>
+          <div class="guest-rsvp" id="guestRsvp" hidden>
+            <div class="guest-rsvp-kicker">БУДЕМ РАДЫ ТВОЕМУ ОТВЕТУ</div>
+            <h3>Ты будешь?</h3>
+            <form id="guestRsvpForm">
+              <label for="guestName">Твоё имя</label>
+              <input id="guestName" name="name" maxlength="60" required placeholder="Как к тебе обращаться">
+              <label>Твой ответ</label>
+              <div class="rsvp-choices">
+                <label><input type="radio" name="attendance" value="yes" required><span>Буду</span></label>
+                <label><input type="radio" name="attendance" value="no"><span>Не смогу</span></label>
+                <label><input type="radio" name="attendance" value="maybe"><span>Пока не знаю</span></label>
+              </div>
+              <div class="guest-count-field" id="guestCountField"><label for="guestCount">Сколько вас будет?</label><select id="guestCount" name="guests"><option value="1">1 человек</option><option value="2">2 человека</option><option value="3">3 человека</option><option value="4">4 человека</option><option value="5">5 человек</option></select></div>
+              <label for="guestComment">Комментарий (необязательно)</label>
+              <textarea id="guestComment" name="comment" rows="2" maxlength="300" placeholder="Можешь что-нибудь добавить"></textarea>
+              <button class="button button-dark guest-submit" id="guestRsvpSubmit" type="submit">Отправить ответ</button>
+              <p class="guest-rsvp-status" id="guestRsvpStatus" role="status"></p>
+            </form>
+          </div>
+          <div class="preview-footnote">ТАК БУДЕТ ВЫГЛЯДЕТЬ ТВОЁ ПРИГЛАШЕНИЕ</div></div>
       </div>
     </section>
 
