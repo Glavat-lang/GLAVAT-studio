@@ -6,7 +6,7 @@
 .editor-actions{display:grid;gap:10px;margin-top:7px}
 .editor-actions .export-button{margin-top:0}
 .button-outline,.button-text{display:inline-flex;align-items:center;justify-content:space-between;gap:20px;padding:13px 17px;font-size:10px;cursor:pointer}
-.button-outline{background:transparent;border:1px solid #bfae a5;border:1px solid #cfc2b8;color:#392d2d}
+.button-outline{background:transparent;border:1px solid #cfc2b8;color:#392d2d}
 .button-outline:hover{background:#f2e8e1}
 .button-text{border:0;background:transparent;color:#77665e;padding:8px 2px;justify-content:center}
 .share-result{margin-top:18px;padding:15px;background:#f1e8e1;border:1px solid #e3d7cd}
