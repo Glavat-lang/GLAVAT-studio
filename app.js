@@ -237,7 +237,7 @@ document.querySelectorAll(".font-choice").forEach((button) => {
     const bytes = new TextEncoder().encode(JSON.stringify(data));
     let binary = "";
     bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
-    return btoa(binary).replace(/\\+/g, "-").replace(/\\//g, "_").replace(/=+$/g, "");
+    return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
   }
 
   function decodeInvitation(encoded) {
@@ -252,12 +252,12 @@ document.querySelectorAll(".font-choice").forEach((button) => {
     if (!data || typeof data !== "object") return;
     fields.title.value = String(data.title || "").slice(0, 70);
     fields.text.value = String(data.text || "").slice(0, 500);
-    fields.date.value = /^\\d{4}-\\d{2}-\\d{2}$/.test(data.date || "") ? data.date : "";
-    fields.time.value = /^\\d{2}:\\d{2}$/.test(data.time || "") ? data.time : "";
+    fields.date.value = /^\d{4}-\d{2}-\d{2}$/.test(data.date || "") ? data.date : "";
+    fields.time.value = /^\d{2}:\d{2}$/.test(data.time || "") ? data.time : "";
     fields.place.value = String(data.place || "").slice(0, 100);
     currentTheme = themes.includes(data.theme) ? data.theme : "cream";
     currentFont = FONT_FAMILIES[data.font] ? data.font : "playfair";
-    imageData = typeof data.image === "string" && data.image.length <= 180000 && /^data:image\\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(data.image) ? data.image : "";
+    imageData = typeof data.image === "string" && data.image.length <= 180000 && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(data.image) ? data.image : "";
     document.querySelectorAll(".font-choice").forEach((button) => button.classList.toggle("active", button.dataset.font === currentFont));
     document.querySelectorAll(".look-choice").forEach((button) => button.classList.toggle("active", button.dataset.theme === currentTheme));
     updatePreview();
