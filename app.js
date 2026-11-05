@@ -11,6 +11,7 @@
   const themes = ["cream", "rose", "wine", "night"];
   let currentTheme = "cream";
   let currentFont = "serif";
+  let imageData = "";
   let mode = "template";
 
   const escapeHTML = (value) => String(value).replace(/[&<>"']/g, (char) => ({
@@ -30,6 +31,10 @@
     $("#previewTime").textContent = fields.time.value || "ВРЕМЯ";
     $("#previewPlace").textContent = fields.place.value.trim().toUpperCase() || "МЕСТО ВСТРЕЧИ";
     preview.className = "live-invite theme-" + currentTheme + " font-" + currentFont;
+    const previewPhoto = $("#previewPhoto");
+    previewPhoto.src = imageData;
+    previewPhoto.hidden = !imageData;
+    $("#removePhoto").hidden = !imageData;
   }
 
   Object.values(fields).forEach((field) => field.addEventListener("input", updatePreview));
@@ -107,6 +112,62 @@
     });
   });
 
+
+  $("#eventPhoto").addEventListener("change", (event) => {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      alert("Выбери изображение в формате JPG, PNG или WEBP.");
+      event.target.value = "";
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      alert("Файл слишком большой. Максимальный размер исходного фото — 10 МБ.");
+      event.target.value = "";
+      return;
+    }
+    const objectUrl = URL.createObjectURL(file);
+    const source = new Image();
+    source.onload = () => {
+      const maxSide = 1000;
+      const scale = Math.min(1, maxSide / Math.max(source.width, source.height));
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.round(source.width * scale));
+      canvas.height = Math.max(1, Math.round(source.height * scale));
+      const context = canvas.getContext("2d");
+      context.drawImage(source, 0, 0, canvas.width, canvas.height);
+      let compressed = canvas.toDataURL("image/jpeg", 0.7);
+      if (compressed.length > 180000) {
+        const smallerScale = 800 / Math.max(canvas.width, canvas.height);
+        const smaller = document.createElement("canvas");
+        smaller.width = Math.max(1, Math.round(canvas.width * Math.min(1, smallerScale)));
+        smaller.height = Math.max(1, Math.round(canvas.height * Math.min(1, smallerScale)));
+        smaller.getContext("2d").drawImage(canvas, 0, 0, smaller.width, smaller.height);
+        compressed = smaller.toDataURL("image/jpeg", 0.58);
+      }
+      URL.revokeObjectURL(objectUrl);
+      if (compressed.length > 180000) {
+        alert("Фото получилось слишком тяжёлым. Попробуй другое изображение.");
+        event.target.value = "";
+        return;
+      }
+      imageData = compressed;
+      updatePreview();
+    };
+    source.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      alert("Не удалось открыть это изображение. Попробуй другой файл.");
+      event.target.value = "";
+    };
+    source.src = objectUrl;
+  });
+
+  $("#removePhoto").addEventListener("click", () => {
+    imageData = "";
+    $("#eventPhoto").value = "";
+    updatePreview();
+  });
+
   const STORAGE_KEY = "glavat-studio-invitations-v1";
   const shareResult = $("#shareResult");
   const shareLinkInput = $("#shareLink");
@@ -119,7 +180,8 @@
       time: fields.time.value,
       place: fields.place.value.trim(),
       theme: currentTheme,
-      font: currentFont
+      font: currentFont,
+      image: imageData
     };
   }
 
@@ -147,6 +209,7 @@
     fields.place.value = String(data.place || "").slice(0, 100);
     currentTheme = themes.includes(data.theme) ? data.theme : "cream";
     currentFont = ["serif", "sans", "classic"].includes(data.font) ? data.font : "serif";
+    imageData = typeof data.image === "string" && data.image.length <= 180000 && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(data.image) ? data.image : "";
     document.querySelectorAll(".font-choice").forEach((button) => button.classList.toggle("active", button.dataset.font === currentFont));
     document.querySelectorAll(".color-choice").forEach((button) => button.classList.toggle("active", button.dataset.color === currentTheme));
     updatePreview();
@@ -252,8 +315,9 @@
       wine: ["#693442", "#f8e9df"],
       night: ["#30313b", "#f5e9df"]
     }[currentTheme];
+    const photoMarkup = imageData ? `<img class="photo" src="${imageData}" alt="Фотография">` : "";
     const documentText = `<!doctype html>
-<html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escapeHTML(title)}</title><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet"><style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:#f7f2ed;font-family:Georgia,serif;color:${palette[1]}}main{width:min(100%,440px);min-height:560px;padding:42px 30px;background:${palette[0]};display:flex;flex-direction:column;align-items:center;text-align:center;box-shadow:0 20px 70px #30262618}.top,.meta,.bottom{font:9px Arial,sans-serif;letter-spacing:2px}.top{width:100%;display:flex;justify-content:space-between}.symbol{font-size:38px;margin:65px 0 25px}h1{font:italic 42px/1.12 ${fontFamily};font-weight:400;margin:0 0 24px}p{font:17px/1.7 ${fontFamily};max-width:320px}.rule{height:1px;width:70%;background:currentColor;opacity:.35;margin:30px 0 24px}.meta{display:grid;gap:13px}.bottom{margin-top:auto;padding-top:50px}@media(max-width:420px){main{min-height:520px;padding:30px 20px}h1{font-size:36px}}</style></head><body><main><div class="top"><span>A SPECIAL INVITATION</span><span>✳</span></div><div class="symbol">✳</div><h1>${escapeHTML(title)}</h1><p>${escapeHTML(text).replace(/\n/g, "<br>")}</p><div class="rule"></div><div class="meta"><span>${escapeHTML(date)}</span><span>${escapeHTML(time)}</span><span>${escapeHTML(place)}</span></div><div class="bottom">С НЕТЕРПЕНИЕМ ЖДУ ТЕБЯ</div></main></body></html>`;
+<html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escapeHTML(title)}</title><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet"><style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:#f7f2ed;font-family:Georgia,serif;color:${palette[1]}}main{width:min(100%,440px);min-height:560px;padding:42px 30px;background:${palette[0]};display:flex;flex-direction:column;align-items:center;text-align:center;box-shadow:0 20px 70px #30262618}.photo{width:100%;max-height:190px;object-fit:cover;margin:24px 0 0}.top,.meta,.bottom{font:9px Arial,sans-serif;letter-spacing:2px}.top{width:100%;display:flex;justify-content:space-between}.symbol{font-size:38px;margin:65px 0 25px}h1{font:italic 42px/1.12 ${fontFamily};font-weight:400;margin:0 0 24px}p{font:17px/1.7 ${fontFamily};max-width:320px}.rule{height:1px;width:70%;background:currentColor;opacity:.35;margin:30px 0 24px}.meta{display:grid;gap:13px}.bottom{margin-top:auto;padding-top:50px}@media(max-width:420px){main{min-height:520px;padding:30px 20px}h1{font-size:36px}}</style></head><body><main><div class="top"><span>A SPECIAL INVITATION</span><span>✳</span></div>${photoMarkup}<div class="symbol">✳</div><h1>${escapeHTML(title)}</h1><p>${escapeHTML(text).replace(/\n/g, "<br>")}</p><div class="rule"></div><div class="meta"><span>${escapeHTML(date)}</span><span>${escapeHTML(time)}</span><span>${escapeHTML(place)}</span></div><div class="bottom">С НЕТЕРПЕНИЕМ ЖДУ ТЕБЯ</div></main></body></html>`;
     const blob = new Blob([documentText], { type: "text/html;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
