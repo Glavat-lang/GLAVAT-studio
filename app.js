@@ -219,6 +219,7 @@ document.querySelectorAll(".font-choice").forEach((button) => {
   const ownerLinkInput = $("#ownerLink");
   let currentInviteId = null;
   let selectedManagedInvite = null;
+  let currentRsvps = [];
 
   function getInvitationData() {
     return {
@@ -353,6 +354,11 @@ document.querySelectorAll(".font-choice").forEach((button) => {
       const data = await apiRequest("/api/invites/" + encodeURIComponent(item.id) + "/rsvps", {
         headers: { Authorization: "Bearer " + item.token }
       });
+      applyInvitation(data.invitation);
+      currentRsvps = data.responses || [];
+      const guestUrl = new URL(window.location.pathname, window.location.origin);
+      guestUrl.searchParams.set("invite", item.id);
+      $("#openGuestInvite").href = guestUrl.toString();
       const counts = data.counts || { yes: 0, no: 0, maybe: 0, guests: 0 };
       $("#rsvpTotal").textContent = String((counts.yes || 0) + (counts.no || 0) + (counts.maybe || 0));
       $("#rsvpSummary").innerHTML = `
@@ -445,6 +451,52 @@ document.querySelectorAll(".font-choice").forEach((button) => {
 
   $("#copyInviteLink").addEventListener("click", () => copyInput(shareLinkInput, $("#copyInviteLink")));
   $("#copyOwnerLink").addEventListener("click", () => copyInput(ownerLinkInput, $("#copyOwnerLink")));
+
+  $("#updateManagedInvite").addEventListener("click", async () => {
+    if (!selectedManagedInvite) return;
+    const button = $("#updateManagedInvite");
+    button.disabled = true;
+    button.textContent = "Сохраняю…";
+    try {
+      const updated = await apiRequest("/api/invites/" + encodeURIComponent(selectedManagedInvite.id), {
+        method: "PUT",
+        headers: { Authorization: "Bearer " + selectedManagedInvite.token },
+        body: JSON.stringify(getInvitationData())
+      });
+      selectedManagedInvite.title = updated.invitation.title || "Без названия";
+      saveManagedInvites(loadManagedInvites().map((item) => item.id === selectedManagedInvite.id ? selectedManagedInvite : item));
+      renderManagedInvites();
+      button.textContent = "Изменения сохранены";
+      window.setTimeout(() => { button.textContent = "Сохранить изменения"; }, 1800);
+    } catch (error) {
+      alert(error.message);
+      button.textContent = "Повторить сохранение";
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  $("#downloadRsvpCsv").addEventListener("click", () => {
+    if (!selectedManagedInvite) return;
+    const quote = (value) => '"' + String(value ?? "").replace(/"/g, '""') + '"';
+    const rows = [
+      ["Имя", "Ответ", "Количество гостей", "Комментарий", "Дата ответа"],
+      ...currentRsvps.map((item) => [
+        item.name,
+        item.attendance === "yes" ? "Будет" : item.attendance === "no" ? "Не сможет" : "Пока не знает",
+        item.guests,
+        item.comment,
+        new Date(item.created_at).toLocaleString("ru-RU")
+      ])
+    ];
+    const csv = "\\uFEFF" + rows.map((row) => row.map(quote).join(";")).join("\\r\\n");
+    const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "glavat-gosti-" + selectedManagedInvite.id + ".csv";
+    link.click();
+    URL.revokeObjectURL(url);
+  });
 
   $("#deleteManagedInvite").addEventListener("click", async () => {
     if (!selectedManagedInvite || !window.confirm("Удалить приглашение и все ответы гостей? Это действие нельзя отменить.")) return;
@@ -553,6 +605,7 @@ document.querySelectorAll(".font-choice").forEach((button) => {
       });
       showRsvpMessage("Спасибо! Твой ответ сохранён. Организатор его уже увидит.");
       formElement.reset();
+      formElement.querySelectorAll("input, select, textarea, button").forEach((control) => { control.disabled = true; });
       $("#guestCountField").hidden = false;
     } catch (error) {
       showRsvpMessage(error.message, true);
