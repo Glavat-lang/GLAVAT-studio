@@ -36,14 +36,14 @@ jobs:
         run: npm install --prefix "$RUNNER_TEMP/glavat-api-test" --no-audit --no-fund
       - name: Test API validation
         run: npm test --prefix "$RUNNER_TEMP/glavat-api-test"
+      - name: Prepare public Pages files
+        run: |
+          mkdir -p "$RUNNER_TEMP/glavat-pages"
+          cp index.html app.js styles.css .nojekyll "$RUNNER_TEMP/glavat-pages/"
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: |
-            index.html
-            app.js
-            styles.css
-            .nojekyll
+          path: ${{ runner.temp }}/glavat-pages
   deploy:
     environment:
       name: github-pages
