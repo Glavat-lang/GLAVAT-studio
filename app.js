@@ -10,6 +10,7 @@
   const preview = $("#liveInvite");
   const themes = ["cream", "rose", "wine", "night"];
   let currentTheme = "cream";
+  let currentFont = "serif";
   let mode = "template";
 
   const escapeHTML = (value) => String(value).replace(/[&<>"']/g, (char) => ({
@@ -28,7 +29,7 @@
     $("#previewDate").textContent = formattedDate(fields.date.value);
     $("#previewTime").textContent = fields.time.value || "ВРЕМЯ";
     $("#previewPlace").textContent = fields.place.value.trim().toUpperCase() || "МЕСТО ВСТРЕЧИ";
-    preview.className = "live-invite theme-" + currentTheme;
+    preview.className = "live-invite theme-" + currentTheme + " font-" + currentFont;
   }
 
   Object.values(fields).forEach((field) => field.addEventListener("input", updatePreview));
@@ -98,6 +99,14 @@
     });
   });
 
+  document.querySelectorAll(".font-choice").forEach((button) => {
+    button.addEventListener("click", () => {
+      currentFont = ["serif", "sans", "classic"].includes(button.dataset.font) ? button.dataset.font : "serif";
+      document.querySelectorAll(".font-choice").forEach((item) => item.classList.toggle("active", item === button));
+      updatePreview();
+    });
+  });
+
   const STORAGE_KEY = "glavat-studio-invitations-v1";
   const shareResult = $("#shareResult");
   const shareLinkInput = $("#shareLink");
@@ -109,7 +118,8 @@
       date: fields.date.value,
       time: fields.time.value,
       place: fields.place.value.trim(),
-      theme: currentTheme
+      theme: currentTheme,
+      font: currentFont
     };
   }
 
@@ -136,6 +146,8 @@
     fields.time.value = /^\d{2}:\d{2}$/.test(data.time || "") ? data.time : "";
     fields.place.value = String(data.place || "").slice(0, 100);
     currentTheme = themes.includes(data.theme) ? data.theme : "cream";
+    currentFont = ["serif", "sans", "classic"].includes(data.font) ? data.font : "serif";
+    document.querySelectorAll(".font-choice").forEach((button) => button.classList.toggle("active", button.dataset.font === currentFont));
     document.querySelectorAll(".color-choice").forEach((button) => button.classList.toggle("active", button.dataset.color === currentTheme));
     updatePreview();
   }
@@ -233,6 +245,7 @@
     const date = fields.date.value ? formattedDate(fields.date.value) : "СКОРО";
     const time = fields.time.value || "ВРЕМЯ УТОЧНИМ";
     const place = fields.place.value.trim() || "МЕСТО ВСТРЕЧИ";
+    const fontFamily = { serif: "'Playfair Display', Georgia, serif", sans: "'DM Sans', Arial, sans-serif", classic: "Georgia, serif" }[currentFont] || "'Playfair Display', Georgia, serif";
     const palette = {
       cream: ["#eadbd2", "#67474a"],
       rose: ["#d9aaa8", "#673e49"],
@@ -240,7 +253,7 @@
       night: ["#30313b", "#f5e9df"]
     }[currentTheme];
     const documentText = `<!doctype html>
-<html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escapeHTML(title)}</title><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet"><style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:#f7f2ed;font-family:Georgia,serif;color:${palette[1]}}main{width:min(100%,440px);min-height:560px;padding:42px 30px;background:${palette[0]};display:flex;flex-direction:column;align-items:center;text-align:center;box-shadow:0 20px 70px #30262618}.top,.meta,.bottom{font:9px Arial,sans-serif;letter-spacing:2px}.top{width:100%;display:flex;justify-content:space-between}.symbol{font-size:38px;margin:65px 0 25px}h1{font:italic 42px/1.12 'Playfair Display',Georgia,serif;font-weight:400;margin:0 0 24px}p{font:17px/1.7 'Playfair Display',Georgia,serif;max-width:320px}.rule{height:1px;width:70%;background:currentColor;opacity:.35;margin:30px 0 24px}.meta{display:grid;gap:13px}.bottom{margin-top:auto;padding-top:50px}@media(max-width:420px){main{min-height:520px;padding:30px 20px}h1{font-size:36px}}</style></head><body><main><div class="top"><span>A SPECIAL INVITATION</span><span>✳</span></div><div class="symbol">✳</div><h1>${escapeHTML(title)}</h1><p>${escapeHTML(text).replace(/\n/g, "<br>")}</p><div class="rule"></div><div class="meta"><span>${escapeHTML(date)}</span><span>${escapeHTML(time)}</span><span>${escapeHTML(place)}</span></div><div class="bottom">С НЕТЕРПЕНИЕМ ЖДУ ТЕБЯ</div></main></body></html>`;
+<html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escapeHTML(title)}</title><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet"><style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:#f7f2ed;font-family:Georgia,serif;color:${palette[1]}}main{width:min(100%,440px);min-height:560px;padding:42px 30px;background:${palette[0]};display:flex;flex-direction:column;align-items:center;text-align:center;box-shadow:0 20px 70px #30262618}.top,.meta,.bottom{font:9px Arial,sans-serif;letter-spacing:2px}.top{width:100%;display:flex;justify-content:space-between}.symbol{font-size:38px;margin:65px 0 25px}h1{font:italic 42px/1.12 ${fontFamily};font-weight:400;margin:0 0 24px}p{font:17px/1.7 ${fontFamily};max-width:320px}.rule{height:1px;width:70%;background:currentColor;opacity:.35;margin:30px 0 24px}.meta{display:grid;gap:13px}.bottom{margin-top:auto;padding-top:50px}@media(max-width:420px){main{min-height:520px;padding:30px 20px}h1{font-size:36px}}</style></head><body><main><div class="top"><span>A SPECIAL INVITATION</span><span>✳</span></div><div class="symbol">✳</div><h1>${escapeHTML(title)}</h1><p>${escapeHTML(text).replace(/\n/g, "<br>")}</p><div class="rule"></div><div class="meta"><span>${escapeHTML(date)}</span><span>${escapeHTML(time)}</span><span>${escapeHTML(place)}</span></div><div class="bottom">С НЕТЕРПЕНИЕМ ЖДУ ТЕБЯ</div></main></body></html>`;
     const blob = new Blob([documentText], { type: "text/html;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
