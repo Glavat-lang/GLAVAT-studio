@@ -46,6 +46,23 @@ async function main() {
     const invitation = await request("/api/invites/" + encodeURIComponent(created.id));
     assert.equal(invitation.invitation.title, "Проверка GLAVAT STUDIO");
 
+    await request("/api/invites/" + encodeURIComponent(created.id), {
+      method: "PUT",
+      headers: { Authorization: "Bearer " + created.ownerToken },
+      body: JSON.stringify({
+        title: "Проверка обновления GLAVAT STUDIO",
+        text: "Тестовое приглашение. Оно будет удалено автоматически.",
+        date: "2026-12-31",
+        time: "18:00",
+        place: "Пермь",
+        theme: "wine",
+        font: "playfair",
+        image: ""
+      })
+    });
+    const updatedInvitation = await request("/api/invites/" + encodeURIComponent(created.id));
+    assert.equal(updatedInvitation.invitation.title, "Проверка обновления GLAVAT STUDIO");
+
     await request("/api/invites/" + encodeURIComponent(created.id) + "/rsvps", {
       method: "POST",
       body: JSON.stringify({ name: "Тестовый гость", attendance: "yes", guests: 2, comment: "Проверка ответа" })
