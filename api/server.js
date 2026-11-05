@@ -8,7 +8,7 @@ const app = express();
 const PORT = Number(process.env.PORT || 3000);
 const DATABASE_URL = process.env.DATABASE_URL;
 const ALLOWED_ORIGINS = new Set([
-  "https://glavat-lang.github.io",
+  ...(process.env.CORS_ORIGIN || "https://glavat-lang.github.io").split(",").map((origin) => origin.trim()).filter(Boolean),
   "http://localhost:3000",
   "http://127.0.0.1:5500",
   "http://localhost:5500"
