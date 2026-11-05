@@ -121,7 +121,7 @@ app.use((req, res, next) => {
     res.set("Access-Control-Allow-Origin", origin);
     res.set("Vary", "Origin");
     res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.set("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
+    res.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   }
   res.set("X-Content-Type-Options", "nosniff");
   res.set("Referrer-Policy", "no-referrer");
@@ -196,6 +196,17 @@ app.post("/api/invites/:id/rsvps", rateLimit({ windowMs: 300000, max: 8 }), asyn
     );
     res.status(201).json({ ok: true, id: result.rows[0].id, createdAt: result.rows[0].created_at });
   } catch (error) {
+    next(error);
+  }
+});
+
+app.put("/api/invites/:id", rateLimit(), requireOwner, findOwnedInvite, async (req, res, next) => {
+  try {
+    const data = normalizeInvitation(req.body);
+    await pool.query("UPDATE invitations SET data = $2::jsonb WHERE id = $1", [req.invite.id, JSON.stringify(data)]);
+    res.json({ ok: true, invitation: data });
+  } catch (error) {
+    if (error.message && !error.code) return jsonError(res, 400, "invalid_invitation", error.message);
     next(error);
   }
 });
