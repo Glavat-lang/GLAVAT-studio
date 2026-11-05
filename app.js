@@ -485,7 +485,7 @@ document.querySelectorAll(".font-choice").forEach((button) => {
     if (!selectedManagedInvite) return;
     const quote = (value) => {
       const raw = String(value ?? "");
-      const safe = /^[=+\\-@\\t\\r]/.test(raw) ? "'" + raw : raw;
+      const safe = /^[=+\-@\t\r]/.test(raw) ? "'" + raw : raw;
       return '"' + safe.replace(/"/g, '""') + '"';
     };
     const rows = [
