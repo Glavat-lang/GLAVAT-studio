@@ -28,10 +28,14 @@ jobs:
         run: |
           node --check app.js
           node --check api/server.js
+      - name: Prepare isolated API test workspace
+        run: |
+          mkdir -p "$RUNNER_TEMP/glavat-api-test"
+          cp api/package.json api/server.js api/server.test.js "$RUNNER_TEMP/glavat-api-test/"
       - name: Install API dependencies
-        run: npm install --prefix api --no-audit --no-fund
+        run: npm install --prefix "$RUNNER_TEMP/glavat-api-test" --no-audit --no-fund
       - name: Test API validation
-        run: npm test --prefix api
+        run: npm test --prefix "$RUNNER_TEMP/glavat-api-test"
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:
