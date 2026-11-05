@@ -267,3 +267,13 @@ body{background:#101010;color:#f0ede7}
  .anniversary-visual em{font-size:44px}
  .desktop-nav{background:#171614!important;color:#eee8df!important;border:1px solid #494033}
 }
+
+
+/* Ровная и спокойная раскладка примеров */
+.template-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px;align-items:stretch;max-width:1120px;margin:44px auto 0}
+.template-card{min-width:0;display:flex;flex-direction:column;min-height:0;transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.template-number{display:block;text-align:left;padding:16px 18px;letter-spacing:1.2px}
+.template-visual{flex:1;min-height:235px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.template-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:58px}
+@media(max-width:800px){.template-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}}
+@media(max-width:480px){.template-grid{grid-template-columns:1fr;gap:15px}.template-visual{min-height:220px}.template-card{max-width:420px;width:100%;margin-inline:auto}}
