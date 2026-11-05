@@ -320,3 +320,73 @@ body{background:#101010;color:#f0ede7}
 @keyframes classic-drift{0%,100%{transform:translateY(12px);opacity:.12}50%{transform:translateY(-16px);opacity:.65}}
 .style-motion-note{display:block;padding:10px 12px;border-left:2px solid #b79a72;background:#1b1916;color:#bdb09d;line-height:1.6}
 @media(prefers-reduced-motion:reduce){.scene-effects,.scene-effects i{animation:none!important;opacity:.22!important}}
+
+
+/* Палитры поводов: каждый стиль заметно отличается по цвету и настроению */
+.theme-cream{background:linear-gradient(145deg,#f7edda 0%,#e8d4b4 100%);color:#493a2c}
+.theme-wine{background:radial-gradient(circle at 50% 8%,#85445a 0%,#572238 55%,#351522 100%);color:#f8e7dc}
+.theme-night{background:radial-gradient(circle at 50% 0%,#3e4277 0%,#20264e 52%,#11152f 100%);color:#fff0d8}
+.theme-noir{background:linear-gradient(145deg,#25434b 0%,#182b35 55%,#101d27 100%);color:#e8f0ec}
+.theme-botanical{background:linear-gradient(145deg,#e5edda 0%,#b7cda9 55%,#8fa989 100%);color:#354d3b}
+.theme-minimal{background:linear-gradient(145deg,#d68c56 0%,#b86e40 48%,#8d4e32 100%);color:#fff0d9}
+.live-invite{isolation:isolate;overflow:hidden}
+.live-invite h3,.live-invite p,.live-meta,.live-footer,.live-symbol,.live-separator{position:relative;z-index:1}
+.live-invite h3{max-width:100%;overflow-wrap:anywhere}
+.swatch-cream{background:linear-gradient(135deg,#f7edda,#b9915c)}
+.swatch-wine{background:linear-gradient(135deg,#572238,#d5a1a2)}
+.swatch-night{background:linear-gradient(135deg,#171b3b,#ff7ea8)}
+.swatch-noir{background:linear-gradient(135deg,#182b35,#70c8c9)}
+.swatch-botanical{background:linear-gradient(135deg,#e5edda,#557b55)}
+.swatch-minimal{background:linear-gradient(135deg,#d68c56,#8d4e32)}
+.invite-card{overflow:hidden;box-sizing:border-box}
+.invite-script{width:100%;max-width:100%;padding:0 20px;box-sizing:border-box;text-align:center;white-space:normal;overflow-wrap:anywhere;word-break:normal;font-size:clamp(38px,5vw,54px);line-height:.98;letter-spacing:-1px}
+.template-visual{position:relative;isolation:isolate;overflow:hidden}
+.template-visual>*:not(.scene-effects){position:relative;z-index:1}
+.template-visual .scene-effects{z-index:0}
+.template-visual .scene-effects i{z-index:0}
+.wedding-visual{background:radial-gradient(circle at 50% 28%,#96546a,#572238 72%);color:#fae9dc}
+.wedding-visual em{font-size:clamp(29px,3vw,43px);line-height:1.05;max-width:100%;padding:0 8px}
+.birthday-visual{background:radial-gradient(circle at 50% 25%,#464b87,#171b3b 75%);color:#fff0d8}
+.birthday-visual strong{color:#ffe0a0}
+.meeting-visual{background:linear-gradient(145deg,#315a62,#182b35 70%);color:#e8f0ec}
+.meeting-visual em{color:#d5f0e8}
+.classic-visual{background:linear-gradient(145deg,#f7edda,#d7bd91);color:#493a2c}
+.classic-visual em{font:italic 43px var(--serif);color:#71502e}
+.housewarming-visual{background:linear-gradient(145deg,#e5edda,#8fa989);color:#354d3b}
+.housewarming-visual em{color:#354d3b}
+.family-visual{background:linear-gradient(145deg,#d68c56,#8d4e32);color:#fff0d9}
+.family-visual em{font:italic 58px var(--serif);color:#fff0d9}
+.template-card{background:#191817}
+.template-card:hover{border-color:#c0a47b}
+.template-number{color:#c8b28e}
+.template-footer{color:#f1e8dc}
+.template-footer b{color:#d4b37c}
+.scene-effects i:nth-child(11){left:24%;top:25%;animation-delay:-2.5s}
+.scene-effects i:nth-child(12){left:70%;top:33%;animation-delay:-.5s}
+.scene-effects i:nth-child(13){left:39%;top:82%;animation-delay:-3.3s}
+.scene-effects i:nth-child(14){left:95%;top:85%;animation-delay:-1.7s}
+.scene-effects i:nth-child(15){left:13%;top:91%;animation-delay:-2.9s}
+.scene-effects i:nth-child(16){left:84%;top:5%;animation-delay:-1.1s}
+.scene-wine .scene-effects i{width:10px;height:15px;border-radius:90% 0 90% 0;background:linear-gradient(145deg,#fff8e8,#d8a8a4);box-shadow:0 0 13px #f6dfb777;animation:petal-drift 6s ease-in-out infinite}
+.scene-night .scene-effects i{width:6px;height:15px;border-radius:2px;background:#f4c45e;box-shadow:0 0 12px #e4bd7988;animation:confetti-drop 4.4s ease-in-out infinite}
+.scene-night .scene-effects i:nth-child(3n){width:8px;height:8px;border-radius:50%;background:#ff7ea8;animation-name:confetti-pop;animation-duration:2.8s}
+.scene-night .scene-effects i:nth-child(2n){background:#70d7f5}
+.scene-noir .scene-effects i{width:25px;height:25px;border-radius:50%;background:#f2bd72;filter:blur(8px);animation:city-bokeh 4.2s ease-in-out infinite}
+.scene-noir .scene-effects i:nth-child(3n){width:55px;height:2px;border-radius:2px;filter:blur(1px);background:linear-gradient(90deg,transparent,#b4e0e4,transparent);animation:city-streak 5s ease-in-out infinite}
+.scene-botanical .scene-effects i{width:8px;height:8px;border-radius:90% 0 90% 0;background:#b6c98d;box-shadow:0 0 13px 3px #e9d39b99;animation:leaf-float 5s ease-in-out infinite}
+.scene-botanical .scene-effects i:nth-child(2n){width:4px;height:4px;border-radius:50%;background:#fff1c7;animation-name:home-glow}
+.scene-minimal .scene-effects i{width:55%;height:2px;left:22%;top:25%;background:linear-gradient(90deg,transparent,#ffd69a,transparent);animation:gold-sheen 3.8s ease-in-out infinite}
+.scene-minimal .scene-effects i:nth-child(2n){top:75%;animation-delay:-2s}
+.scene-cream .scene-effects i{width:5px;height:5px;border-radius:50%;background:#fff0c9;box-shadow:0 0 10px 2px #eacb8b;animation:classic-drift 4.5s ease-in-out infinite}
+.scene-cream .scene-effects i:nth-child(3n){width:2px;height:2px;animation-name:twinkle;animation-duration:2s}
+@keyframes petal-drift{0%{transform:translate3d(0,-25px,0) rotate(-35deg);opacity:0}18%{opacity:.95}82%{opacity:.8}100%{transform:translate3d(28px,620px,0) rotate(190deg);opacity:0}}
+@keyframes confetti-drop{0%{transform:translate3d(0,-35px,0) rotate(0);opacity:0}12%{opacity:1}85%{opacity:.95}100%{transform:translate3d(25px,620px,0) rotate(520deg);opacity:0}}
+@keyframes confetti-pop{0%,100%{transform:scale(.2);opacity:0}30%,70%{transform:scale(1.8);opacity:1}}
+@keyframes city-bokeh{0%,100%{transform:scale(.45);opacity:.18}50%{transform:scale(1.7);opacity:.85}}
+@keyframes city-streak{0%,100%{transform:translateX(-35px);opacity:0}50%{transform:translateX(35px);opacity:.85}}
+@keyframes leaf-float{0%,100%{transform:translate3d(-8px,15px,0) rotate(-35deg);opacity:.1}50%{transform:translate3d(15px,-22px,0) rotate(100deg);opacity:.95}}
+@keyframes home-glow{0%,100%{transform:translate3d(0,10px,0) scale(.4);opacity:.15}50%{transform:translate3d(8px,-18px,0) scale(1.6);opacity:1}}
+@keyframes gold-sheen{0%,100%{transform:translateX(-30px);opacity:0}45%,60%{transform:translateX(30px);opacity:.9}}
+@keyframes classic-drift{0%,100%{transform:translateY(14px);opacity:.2}50%{transform:translateY(-20px);opacity:.95}}
+@keyframes twinkle{0%,100%{transform:scale(.3);opacity:.1}50%{transform:scale(2);opacity:1}}
+@media(prefers-reduced-motion:reduce){.scene-effects,.scene-effects i{animation:none!important;opacity:.22!important}}
