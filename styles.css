@@ -23,3 +23,11 @@
 .saved-invite-open{flex:1;display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left;border:0;background:none;color:#514440;font-size:10px;cursor:pointer}
 .saved-invite-open span{color:#a07875;font-size:9px;white-space:nowrap}
 .saved-invite-delete{border:0;background:none;color:#a18f85;font-size:18px;cursor:pointer;padding:2px 7px}
+
+/* Invitation typography choices */
+.font-options{display:flex;flex-wrap:wrap;gap:7px}
+.font-choice{border:1px solid #e2d8d0;background:#fffdfa;color:#776a62;padding:9px 11px;font-size:9px;cursor:pointer;transition:background .2s,border-color .2s,color .2s}
+.font-choice.active{border-color:#9d6e70;background:#f2e6e1;color:#4a3535}
+.live-invite.font-serif h3,.live-invite.font-serif p{font-family:var(--serif)}
+.live-invite.font-sans h3,.live-invite.font-sans p{font-family:var(--sans);font-style:normal}
+.live-invite.font-classic h3,.live-invite.font-classic p{font-family:Georgia,serif}
