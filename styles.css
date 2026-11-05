@@ -31,3 +31,11 @@
 .live-invite.font-serif h3,.live-invite.font-serif p{font-family:var(--serif)}
 .live-invite.font-sans h3,.live-invite.font-sans p{font-family:var(--sans);font-style:normal}
 .live-invite.font-classic h3,.live-invite.font-classic p{font-family:Georgia,serif}
+
+/* Invitation photo upload and preview */
+.photo-upload-group input[type=file]{display:block;width:100%;padding:10px;border:1px dashed #d8c9be;background:#fffdfa;font-size:10px;color:#75665e}
+.photo-upload-note{font-size:9px;line-height:1.5;color:#9a8d84;margin-top:7px}
+.remove-photo{margin-top:7px}
+.remove-photo[hidden]{display:none}
+.preview-photo{width:100%;max-height:170px;object-fit:cover;margin:22px 0 0}
+.preview-photo[hidden]{display:none}
