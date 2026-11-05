@@ -213,7 +213,7 @@ document.querySelectorAll(".font-choice").forEach((button) => {
 
   const STORAGE_KEY = "glavat-studio-invitations-v1";
   const MANAGED_KEY = "glavat-studio-managed-v1";
-  const API_BASE = "https://API_DOMAIN_TO_BE_SET";
+  const API_BASE = "https://glavat-studio-api-production.up.railway.app";
   const shareResult = $("#shareResult");
   const shareLinkInput = $("#shareLink");
   const ownerLinkInput = $("#ownerLink");
@@ -535,7 +535,8 @@ document.querySelectorAll(".font-choice").forEach((button) => {
   $("#guestRsvpForm").addEventListener("submit", async (event) => {
     event.preventDefault();
     if (!currentInviteId) return;
-    const form = new FormData(event.currentTarget);
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
     const payload = {
       name: String(form.get("name") || "").trim(),
       attendance: String(form.get("attendance") || ""),
@@ -551,7 +552,7 @@ document.querySelectorAll(".font-choice").forEach((button) => {
         body: JSON.stringify(payload)
       });
       showRsvpMessage("Спасибо! Твой ответ сохранён. Организатор его уже увидит.");
-      event.currentTarget.reset();
+      formElement.reset();
       $("#guestCountField").hidden = false;
     } catch (error) {
       showRsvpMessage(error.message, true);
