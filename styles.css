@@ -28,9 +28,7 @@
 .font-options{display:flex;flex-wrap:wrap;gap:7px}
 .font-choice{border:1px solid #e2d8d0;background:#fffdfa;color:#776a62;padding:9px 11px;font-size:9px;cursor:pointer;transition:background .2s,border-color .2s,color .2s}
 .font-choice.active{border-color:#9d6e70;background:#f2e6e1;color:#4a3535}
-.live-invite.font-serif h3,.live-invite.font-serif p{font-family:var(--serif)}
-.live-invite.font-sans h3,.live-invite.font-sans p{font-family:var(--sans);font-style:normal}
-.live-invite.font-classic h3,.live-invite.font-classic p{font-family:Georgia,serif}
+.live-invite h3,.live-invite p{font-family:var(--invite-font,var(--serif))}
 
 /* Invitation photo upload and preview */
 .photo-upload-group input[type=file]{display:block;width:100%;padding:10px;border:1px dashed #d8c9be;background:#fffdfa;font-size:10px;color:#75665e}
