@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Cinzel:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Lora:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Merriweather:wght@400;700&family=Oswald:wght@400;500;600;700&family=Pacifico&family=Playfair+Display:wght@400;500;600;700&family=Raleway:wght@400;500;600;700&family=Roboto+Slab:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261105-13">
+  <link rel="stylesheet" href="styles.css?v=20261105-14">
 </head>
 <body>
   <div class="announcement">GLAVAT STUDIO — СТУДИЯ ЦИФРОВЫХ ПРИГЛАШЕНИЙ</div>
@@ -110,7 +110,12 @@
             <div class="saved-heading">ОТВЕТЫ ГОСТЕЙ <span id="rsvpTotal">0</span></div>
             <div id="rsvpSummary" class="rsvp-summary"></div>
             <div id="rsvpList"><p class="empty-saved">Выбери приглашение, чтобы посмотреть ответы.</p></div>
-            <button id="deleteManagedInvite" class="button-text danger-action" type="button">Удалить приглашение</button>
+            <div class="organizer-actions">
+              <a id="openGuestInvite" class="button button-outline" href="#" target="_blank" rel="noopener">Открыть приглашение</a>
+              <button id="updateManagedInvite" class="button button-dark" type="button">Сохранить изменения</button>
+              <button id="downloadRsvpCsv" class="button button-outline" type="button">Скачать список гостей</button>
+              <button id="deleteManagedInvite" class="button-text danger-action" type="button">Удалить приглашение</button>
+            </div>
           </div>
           <p class="editor-disclaimer">Черновики хранятся в этом браузере. Персональная ссылка содержит данные приглашения и открывается у получателя без регистрации.</p>
         </div>
@@ -131,7 +136,7 @@
               <label for="guestComment">Комментарий (необязательно)</label>
               <textarea id="guestComment" name="comment" rows="2" maxlength="300" placeholder="Можешь что-нибудь добавить"></textarea>
               <button class="button button-dark guest-submit" id="guestRsvpSubmit" type="submit">Отправить ответ</button>
-              <p class="guest-rsvp-status" id="guestRsvpStatus" role="status"></p>
+              <p class="guest-rsvp-status" id="guestRsvpStatus" role="status"></p><p class="guest-privacy-note">Твой ответ, имя и комментарий будут доступны только организатору.</p>
             </form>
           </div>
           <div class="preview-footnote">ТАК БУДЕТ ВЫГЛЯДЕТЬ ТВОЁ ПРИГЛАШЕНИЕ</div></div>
