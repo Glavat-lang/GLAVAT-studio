@@ -98,6 +98,135 @@
     });
   });
 
+  const STORAGE_KEY = "glavat-studio-invitations-v1";
+  const shareResult = $("#shareResult");
+  const shareLinkInput = $("#shareLink");
+
+  function getInvitationData() {
+    return {
+      title: fields.title.value.trim(),
+      text: fields.text.value.trim(),
+      date: fields.date.value,
+      time: fields.time.value,
+      place: fields.place.value.trim(),
+      theme: currentTheme
+    };
+  }
+
+  function encodeInvitation(data) {
+    const bytes = new TextEncoder().encode(JSON.stringify(data));
+    let binary = "";
+    bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
+    return btoa(binary).replace(/\\+/g, "-").replace(/\\//g, "_").replace(/=+$/g, "");
+  }
+
+  function decodeInvitation(encoded) {
+    const base64 = encoded.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = base64 + "=".repeat((4 - base64.length % 4) % 4);
+    const binary = atob(padded);
+    const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+    return JSON.parse(new TextDecoder().decode(bytes));
+  }
+
+  function applyInvitation(data) {
+    if (!data || typeof data !== "object") return;
+    fields.title.value = String(data.title || "").slice(0, 70);
+    fields.text.value = String(data.text || "").slice(0, 500);
+    fields.date.value = /^\\d{4}-\\d{2}-\\d{2}$/.test(data.date || "") ? data.date : "";
+    fields.time.value = /^\\d{2}:\\d{2}$/.test(data.time || "") ? data.time : "";
+    fields.place.value = String(data.place || "").slice(0, 100);
+    currentTheme = themes.includes(data.theme) ? data.theme : "cream";
+    document.querySelectorAll(".color-choice").forEach((button) => button.classList.toggle("active", button.dataset.color === currentTheme));
+    updatePreview();
+  }
+
+  function loadSavedInvites() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      return Array.isArray(saved) ? saved : [];
+    } catch (_) {
+      return [];
+    }
+  }
+
+  function renderSavedInvites() {
+    const saved = loadSavedInvites();
+    $("#savedCount").textContent = String(saved.length);
+    const list = $("#savedInviteList");
+    if (!saved.length) {
+      list.innerHTML = '<p class="empty-saved">Пока ничего не сохранено.</p>';
+      return;
+    }
+    list.innerHTML = saved.map((item) => `
+      <div class="saved-invite-item" data-id="${escapeHTML(item.id)}">
+        <button class="saved-invite-open" type="button">${escapeHTML(item.title || "Без названия")}<span>Открыть ↗</span></button>
+        <button class="saved-invite-delete" type="button" aria-label="Удалить черновик">×</button>
+      </div>`).join("");
+    list.querySelectorAll(".saved-invite-item").forEach((row) => {
+      const item = saved.find((entry) => entry.id === row.dataset.id);
+      row.querySelector(".saved-invite-open").addEventListener("click", () => applyInvitation(item));
+      row.querySelector(".saved-invite-delete").addEventListener("click", () => {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(loadSavedInvites().filter((entry) => entry.id !== item.id)));
+        renderSavedInvites();
+      });
+    });
+  }
+
+  $("#saveInvite").addEventListener("click", () => {
+    const data = getInvitationData();
+    if (!data.title && !data.text) {
+      alert("Добавь заголовок или текст приглашения, чтобы сохранить черновик.");
+      return;
+    }
+    const saved = loadSavedInvites();
+    saved.unshift({ id: String(Date.now()), ...data });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(saved.slice(0, 20)));
+    renderSavedInvites();
+    $("#saveInvite").innerHTML = "Сохранено <span>✓</span>";
+    window.setTimeout(() => { $("#saveInvite").innerHTML = "Сохранить черновик <span>↓</span>"; }, 1800);
+  });
+
+  $("#createInviteLink").addEventListener("click", () => {
+    const data = getInvitationData();
+    if (!data.title && !data.text) {
+      alert("Сначала добавь заголовок или текст приглашения.");
+      return;
+    }
+    const encoded = encodeInvitation(data);
+    const url = new URL(window.location.href);
+    url.hash = "invite=" + encoded;
+    shareLinkInput.value = url.toString();
+    shareResult.hidden = false;
+    shareResult.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+
+  $("#copyInviteLink").addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(shareLinkInput.value);
+      $("#copyInviteLink").textContent = "Скопировано ✓";
+    } catch (_) {
+      shareLinkInput.focus();
+      shareLinkInput.select();
+      const copied = document.execCommand("copy");
+      $("#copyInviteLink").textContent = copied ? "Скопировано ✓" : "Выдели и скопируй";
+    }
+    window.setTimeout(() => { $("#copyInviteLink").textContent = "Копировать"; }, 1800);
+  });
+
+  function loadSharedInvitation() {
+    const match = window.location.hash.match(/^#invite=(.+)$/);
+    if (!match) return;
+    try {
+      applyInvitation(decodeInvitation(match[1]));
+      $("#create").scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch (_) {
+      console.warn("Не удалось открыть ссылку приглашения: данные повреждены.");
+    }
+  }
+
+  renderSavedInvites();
+  loadSharedInvitation();
+
   function downloadInvitation() {
     const title = fields.title.value.trim() || "Ты приглашён!";
     const text = fields.text.value.trim() || "Буду рад разделить этот день с тобой.";
