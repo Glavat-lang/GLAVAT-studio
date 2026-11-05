@@ -152,3 +152,118 @@ body{background:var(--paper);color:var(--ink);font-size:14px}
  .field-group input,.field-group textarea{font-size:16px}
  .look-choice{font-size:11px}
 }
+
+
+/* GLAVAT STUDIO — dark editorial luxury */
+:root{
+  --paper:#101010;--ink:#f0ede7;--muted:#aaa39a;--rose:#b79a72;--wine:#80645b;--line:#302e2b;
+  color-scheme:dark;
+}
+html{background:#101010}
+body{background:#101010;color:#f0ede7}
+.announcement{background:#090909;color:#b7aa98;border-bottom:1px solid #282521;letter-spacing:2.4px}
+.site-header{background:#101010;border-color:#292724}
+.brand{color:#f3f0e9;letter-spacing:1px}
+.brand span{color:#a99476}
+.brand i{color:#9b8c78}
+.desktop-nav{color:#b0aaa1}
+.desktop-nav a:hover,.text-link:hover{color:#d2b58b}
+.header-cta{border:1px solid #61513e;color:#e8dfd2;background:transparent}
+.header-cta:hover{background:#c1a47a;color:#111;border-color:#c1a47a}
+.hero{background:radial-gradient(ellipse at 78% 40%,#29231e 0%,#171614 35%,#101010 72%);color:#f1eee8}
+.eyebrow,.section-kicker{color:#aa987e}
+.hero h1,.intro h2,.section-heading h2,.closing h2{color:#f1eee8}
+.hero h1 em,.intro h2 em,.section-heading h2 em,.closing h2 em{color:#c0a47b}
+.hero-description,.intro-content>div{color:#aaa49b}
+.hero-note{color:#a69c90}
+.button-dark{background:#c1a47a;color:#141210;box-shadow:none}
+.button-dark:hover{background:#ddc49d;color:#111}
+.text-link{color:#ded7cb}
+.invite-card{background:linear-gradient(145deg,#25221e,#111);color:#d6c4a6;border:1px solid #79664c;box-shadow:0 28px 80px #0009}
+.invite-script{color:#e8dfd2}
+.invite-rule{background:#a58b67}
+.invite-detail,.invite-bottom{color:#c4b49b}
+.art-orbit{border-color:#4a4034}
+.orbit-two{border-color:#332f29}
+.floating-tag{background:#171614;color:#c9b99f;border-color:#494033;box-shadow:0 12px 35px #0008}
+.art-caption{color:#a99577}
+.marquee{background:#1a1917;color:#b6a486;border-top:1px solid #302a22;border-bottom:1px solid #302a22}
+.intro{background:#101010}
+.feature-grid{border-color:#302e2b}
+.feature>span,.feature-index{color:#c0a47b}
+.feature h3{color:#eee8df}
+.feature p{color:#aaa39a}
+.templates-section{background:#171614;border-top:1px solid #2c2924;border-bottom:1px solid #2c2924}
+.section-heading>p{color:#aaa39a}
+.template-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.template-card{background:#201e1b;color:#eee8df;border:1px solid #38332c;border-radius:3px;box-shadow:0 10px 28px #0004}
+.template-card:hover{transform:translateY(-4px);border-color:#8e7656;box-shadow:0 18px 40px #0008}
+.template-number{color:#b5a184;border-bottom:1px solid #373127}
+.template-visual{height:245px;gap:13px;padding:20px}
+.template-visual small,.template-visual>span{font:8px var(--sans);letter-spacing:2px}
+.template-footer{color:#e9e2d8;border-top:1px solid #39342d}
+.template-footer b{font-size:8px;letter-spacing:1.5px;color:#c0a47b}
+.wedding-visual{background:radial-gradient(circle at 50% 35%,#4a4034,#171513 72%);color:#e8d9bd}
+.wedding-visual em{font:italic 48px var(--serif);color:#e8d9bd;margin:15px 0}
+.birthday-visual{background:linear-gradient(145deg,#2b2927,#111);color:#d3b17c;letter-spacing:0}
+.birthday-visual strong{font:600 48px/.92 var(--sans);letter-spacing:-2px}
+.birthday-visual span{color:#a99a83}
+.meeting-visual{background:linear-gradient(145deg,#242a2d,#111719);color:#d7d0c4}
+.meeting-visual em{font:italic 49px var(--serif);color:#e5ddd0}
+.party-visual{background:radial-gradient(circle at 50% 30%,#41302c,#111 72%);color:#e0b78e}
+.party-visual strong{font:600 42px/.86 var(--sans);letter-spacing:2px}
+.housewarming-visual{background:linear-gradient(145deg,#332d28,#171411);color:#d5c3a7}
+.housewarming-visual em{font:italic 38px/.95 var(--serif);color:#eadfce}
+.anniversary-visual{background:linear-gradient(145deg,#262626,#111);color:#d4c6aa}
+.anniversary-visual em{font:italic 58px var(--serif);color:#e7ddca}
+.editor-section{background:#101010}
+.editor-shell{background:#171614;border-color:#39342c;box-shadow:0 20px 60px #0007}
+.editor-panel{background:#171614;border-color:#373129}
+.editor-tabs{border-color:#39342c}
+.editor-tab{color:#938b80}
+.editor-tab.active{color:#e9dfd1;border-color:#c0a47b}
+.field-group label{color:#d1c8ba}
+.field-group input,.field-group textarea{background:#111;color:#eee8df;border-color:#3d3830}
+.field-group input::placeholder,.field-group textarea::placeholder{color:#766f65}
+.field-group input:focus,.field-group textarea:focus{border-color:#b89a70;box-shadow:0 0 0 3px #b89a7018}
+.field-hint,.photo-upload-note{color:#999084}
+.look-choice,.motion-choice,.font-choice{background:#1d1b18;color:#d7d0c5;border-color:#403a31}
+.look-choice.active,.motion-choice.active,.font-choice.active{background:#3a3024;color:#f0dfc4;border-color:#b79a72;box-shadow:inset 0 0 0 1px #b79a7220}
+.preview-side{background:#121211}
+.preview-label,.preview-footnote{color:#b7a88f}
+.preview-stage{background:radial-gradient(ellipse,#26221d,#121211 70%)}
+.live-invite{border:1px solid #716047;box-shadow:0 24px 60px #0009}
+.editor-disclaimer{color:#8e877d}
+.button-outline{color:#e4d9c9;border-color:#716047;background:transparent}
+.button-outline:hover{background:#2a241c;border-color:#b79a72}
+.button-text{color:#c2a77e}
+.share-result{background:#211e19;border-color:#494033;color:#eee8df}
+.share-link-row input{background:#111;color:#eee;border-color:#494033}
+.share-link-row button{background:#c0a47b;color:#15120e}
+.saved-invites{border-color:#39342c}
+.saved-heading{color:#bba98d}
+.saved-invite-item{border-color:#39342c}
+.saved-invite-open{color:#e6ded2}
+.saved-invite-open span{color:#bda47f}
+.empty-saved{color:#91897e}
+.closing{background:linear-gradient(135deg,#1d1b18,#0b0b0b);border-top:1px solid #3b3328}
+.closing-mark{color:#c0a47b;font:500 12px var(--sans);letter-spacing:5px}
+.closing-small{color:#a89b87}
+.button-light{background:#c0a47b;color:#15120e}
+.button-light:hover{background:#dfc49a}
+.site-footer{background:#090909;color:#9e9589;border-top:1px solid #29251f}
+.site-footer .brand{color:#eee8df}
+.site-footer .brand span{color:#b59b75}
+.announcement-dot,.live-dot{background:#c0a47b}
+@media(max-width:800px){.template-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){
+ .template-grid{grid-template-columns:1fr 1fr;gap:10px}
+ .template-visual{height:205px;padding:12px}
+ .template-number{padding:14px 12px;font-size:8px}
+ .template-footer{padding:15px 12px;font-size:10px}
+ .birthday-visual strong,.party-visual strong{font-size:35px}
+ .wedding-visual em,.meeting-visual em{font-size:36px}
+ .housewarming-visual em{font-size:30px}
+ .anniversary-visual em{font-size:44px}
+ .desktop-nav{background:#171614!important;color:#eee8df!important;border:1px solid #494033}
+}
