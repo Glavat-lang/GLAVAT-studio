@@ -212,8 +212,13 @@ document.querySelectorAll(".font-choice").forEach((button) => {
   });
 
   const STORAGE_KEY = "glavat-studio-invitations-v1";
+  const MANAGED_KEY = "glavat-studio-managed-v1";
+  const API_BASE = "https://API_DOMAIN_TO_BE_SET";
   const shareResult = $("#shareResult");
   const shareLinkInput = $("#shareLink");
+  const ownerLinkInput = $("#ownerLink");
+  let currentInviteId = null;
+  let selectedManagedInvite = null;
 
   function getInvitationData() {
     return {
@@ -232,7 +237,7 @@ document.querySelectorAll(".font-choice").forEach((button) => {
     const bytes = new TextEncoder().encode(JSON.stringify(data));
     let binary = "";
     bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
-    return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+    return btoa(binary).replace(/\\+/g, "-").replace(/\\//g, "_").replace(/=+$/g, "");
   }
 
   function decodeInvitation(encoded) {
@@ -247,12 +252,12 @@ document.querySelectorAll(".font-choice").forEach((button) => {
     if (!data || typeof data !== "object") return;
     fields.title.value = String(data.title || "").slice(0, 70);
     fields.text.value = String(data.text || "").slice(0, 500);
-    fields.date.value = /^\d{4}-\d{2}-\d{2}$/.test(data.date || "") ? data.date : "";
-    fields.time.value = /^\d{2}:\d{2}$/.test(data.time || "") ? data.time : "";
+    fields.date.value = /^\\d{4}-\\d{2}-\\d{2}$/.test(data.date || "") ? data.date : "";
+    fields.time.value = /^\\d{2}:\\d{2}$/.test(data.time || "") ? data.time : "";
     fields.place.value = String(data.place || "").slice(0, 100);
     currentTheme = themes.includes(data.theme) ? data.theme : "cream";
     currentFont = FONT_FAMILIES[data.font] ? data.font : "playfair";
-    imageData = typeof data.image === "string" && data.image.length <= 180000 && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(data.image) ? data.image : "";
+    imageData = typeof data.image === "string" && data.image.length <= 180000 && /^data:image\\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(data.image) ? data.image : "";
     document.querySelectorAll(".font-choice").forEach((button) => button.classList.toggle("active", button.dataset.font === currentFont));
     document.querySelectorAll(".look-choice").forEach((button) => button.classList.toggle("active", button.dataset.theme === currentTheme));
     updatePreview();
@@ -290,6 +295,87 @@ document.querySelectorAll(".font-choice").forEach((button) => {
     });
   }
 
+  function loadManagedInvites() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(MANAGED_KEY) || "[]");
+      return Array.isArray(saved) ? saved : [];
+    } catch (_) {
+      return [];
+    }
+  }
+
+  function saveManagedInvites(items) {
+    localStorage.setItem(MANAGED_KEY, JSON.stringify(items.slice(0, 50)));
+  }
+
+  function renderManagedInvites() {
+    const items = loadManagedInvites();
+    $("#managedCount").textContent = String(items.length);
+    const list = $("#managedInviteList");
+    if (!items.length) {
+      list.innerHTML = '<p class="empty-saved">Созданные приглашения появятся здесь.</p>';
+      return;
+    }
+    list.innerHTML = items.map((item) => `
+      <div class="saved-invite-item" data-id="${escapeHTML(item.id)}">
+        <button class="saved-invite-open managed-open" type="button">${escapeHTML(item.title || "Без названия")}<span>Ответы гостей</span></button>
+      </div>`).join("");
+    list.querySelectorAll(".managed-open").forEach((button) => {
+      button.addEventListener("click", () => {
+        const item = items.find((entry) => entry.id === button.closest("[data-id]").dataset.id);
+        if (item) loadRsvps(item);
+      });
+    });
+  }
+
+  async function apiRequest(path, options = {}) {
+    const response = await fetch(API_BASE + path, {
+      ...options,
+      headers: { "Content-Type": "application/json", ...(options.headers || {}) }
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.message || "Не удалось выполнить запрос.");
+    return result;
+  }
+
+  function showRsvpMessage(message, isError = false) {
+    const status = $("#guestRsvpStatus");
+    status.textContent = message;
+    status.classList.toggle("is-error", isError);
+  }
+
+  async function loadRsvps(item) {
+    selectedManagedInvite = item;
+    const panel = $("#organizerDashboard");
+    panel.hidden = false;
+    $("#rsvpList").innerHTML = '<p class="empty-saved">Загружаю ответы гостей…</p>';
+    try {
+      const data = await apiRequest("/api/invites/" + encodeURIComponent(item.id) + "/rsvps", {
+        headers: { Authorization: "Bearer " + item.token }
+      });
+      const counts = data.counts || { yes: 0, no: 0, maybe: 0, guests: 0 };
+      $("#rsvpTotal").textContent = String((counts.yes || 0) + (counts.no || 0) + (counts.maybe || 0));
+      $("#rsvpSummary").innerHTML = `
+        <div><strong>${counts.yes || 0}</strong><span>Будут</span></div>
+        <div><strong>${counts.no || 0}</strong><span>Не смогут</span></div>
+        <div><strong>${counts.maybe || 0}</strong><span>Не решили</span></div>
+        <div><strong>${counts.guests || 0}</strong><span>Всего гостей</span></div>`;
+      const list = $("#rsvpList");
+      if (!data.responses.length) {
+        list.innerHTML = '<p class="empty-saved">Пока никто не ответил. Как только гости откликнутся, ответы появятся здесь.</p>';
+      } else {
+        list.innerHTML = data.responses.map((entry) => {
+          const label = entry.attendance === "yes" ? "Будет" : entry.attendance === "no" ? "Не сможет" : "Пока не знает";
+          const date = new Date(entry.created_at).toLocaleString("ru-RU", { dateStyle: "short", timeStyle: "short" });
+          return `<article class="rsvp-response"><div><strong>${escapeHTML(entry.name)}</strong><span>${label}</span></div><p>${entry.attendance === "yes" ? "Гостей: " + entry.guests : ""}${entry.comment ? (entry.attendance === "yes" ? " · " : "") + escapeHTML(entry.comment) : ""}</p><small>${escapeHTML(date)}</small></article>`;
+        }).join("");
+      }
+      panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    } catch (error) {
+      $("#rsvpList").innerHTML = '<p class="empty-saved">' + escapeHTML(error.message) + '</p>';
+    }
+  }
+
   $("#saveInvite").addEventListener("click", () => {
     const data = getInvitationData();
     if (!data.title && !data.text) {
@@ -305,54 +391,178 @@ document.querySelectorAll(".font-choice").forEach((button) => {
       return;
     }
     renderSavedInvites();
-    $("#saveInvite").innerHTML = "Сохранено";
-    window.setTimeout(() => { $("#saveInvite").innerHTML = "Сохранить черновик"; }, 1800);
+    $("#saveInvite").textContent = "Сохранено";
+    window.setTimeout(() => { $("#saveInvite").textContent = "Сохранить черновик"; }, 1800);
   });
 
-  $("#createInviteLink").addEventListener("click", () => {
+  $("#createInviteLink").addEventListener("click", async () => {
     const data = getInvitationData();
     if (!data.title && !data.text) {
       alert("Сначала добавь заголовок или текст приглашения.");
       return;
     }
-    const encoded = encodeInvitation(data);
-    const url = new URL(window.location.href);
-    url.hash = "invite=" + encoded;
-    const shareUrl = url.toString();
-    if (shareUrl.length > 80000) {
-      alert("Ссылка получилась слишком длинной. Убери фотографию или выбери изображение поменьше, затем создай ссылку снова.");
-      return;
+    const button = $("#createInviteLink");
+    button.disabled = true;
+    button.textContent = "Создаю ссылку…";
+    try {
+      const created = await apiRequest("/api/invites", { method: "POST", body: JSON.stringify(data) });
+      const item = { id: created.id, token: created.ownerToken, title: data.title || "Без названия", createdAt: new Date().toISOString() };
+      const managed = loadManagedInvites().filter((entry) => entry.id !== item.id);
+      managed.unshift(item);
+      saveManagedInvites(managed);
+      renderManagedInvites();
+
+      const guestUrl = new URL(window.location.pathname, window.location.origin);
+      guestUrl.searchParams.set("invite", created.id);
+      const ownerUrl = new URL(window.location.pathname, window.location.origin);
+      ownerUrl.searchParams.set("manage", created.id);
+      ownerUrl.hash = "key=" + created.ownerToken;
+      shareLinkInput.value = guestUrl.toString();
+      ownerLinkInput.value = ownerUrl.toString();
+      shareResult.hidden = false;
+      shareResult.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      $("#createInviteLink").textContent = "Ссылка создана";
+      window.setTimeout(() => { $("#createInviteLink").textContent = "Создать ссылку"; }, 2200);
+    } catch (error) {
+      alert(error.message || "Не удалось создать приглашение. Попробуй ещё раз.");
+    } finally {
+      button.disabled = false;
+      if (button.textContent === "Создаю ссылку…") button.textContent = "Создать ссылку";
     }
-    shareLinkInput.value = shareUrl;
-    shareResult.hidden = false;
-    shareResult.scrollIntoView({ behavior: "smooth", block: "nearest" });
   });
 
-  $("#copyInviteLink").addEventListener("click", async () => {
+  async function copyInput(input, button) {
     try {
-      await navigator.clipboard.writeText(shareLinkInput.value);
-      $("#copyInviteLink").textContent = "Скопировано";
+      await navigator.clipboard.writeText(input.value);
+      button.textContent = "Скопировано";
     } catch (_) {
-      shareLinkInput.focus();
-      shareLinkInput.select();
-      const copied = document.execCommand("copy");
-      $("#copyInviteLink").textContent = copied ? "Скопировано" : "Выдели и скопируй";
+      input.focus();
+      input.select();
+      button.textContent = document.execCommand("copy") ? "Скопировано" : "Выдели и скопируй";
     }
-    window.setTimeout(() => { $("#copyInviteLink").textContent = "Копировать"; }, 1800);
+    window.setTimeout(() => { button.textContent = "Копировать"; }, 1800);
+  }
+
+  $("#copyInviteLink").addEventListener("click", () => copyInput(shareLinkInput, $("#copyInviteLink")));
+  $("#copyOwnerLink").addEventListener("click", () => copyInput(ownerLinkInput, $("#copyOwnerLink")));
+
+  $("#deleteManagedInvite").addEventListener("click", async () => {
+    if (!selectedManagedInvite || !window.confirm("Удалить приглашение и все ответы гостей? Это действие нельзя отменить.")) return;
+    try {
+      await apiRequest("/api/invites/" + encodeURIComponent(selectedManagedInvite.id), {
+        method: "DELETE",
+        headers: { Authorization: "Bearer " + selectedManagedInvite.token }
+      });
+      saveManagedInvites(loadManagedInvites().filter((item) => item.id !== selectedManagedInvite.id));
+      selectedManagedInvite = null;
+      $("#organizerDashboard").hidden = true;
+      renderManagedInvites();
+    } catch (error) {
+      alert(error.message);
+    }
   });
 
-  function loadSharedInvitation() {
-    const match = window.location.hash.match(/^#invite=(.+)$/);
-    if (!match) return;
+  function showGuestView(inviteId) {
+    currentInviteId = inviteId;
+    document.body.classList.add("guest-view");
+    $("#guestRsvp").hidden = false;
+    $("#create").scrollIntoView({ behavior: "instant", block: "start" });
+  }
+
+  async function loadGuestInvitation(id) {
     try {
-      applyInvitation(decodeInvitation(match[1]));
-      $("#create").scrollIntoView({ behavior: "smooth", block: "start" });
-    } catch (_) {
-      console.warn("Не удалось открыть ссылку приглашения: данные повреждены.");
+      const result = await apiRequest("/api/invites/" + encodeURIComponent(id));
+      applyInvitation(result.invitation);
+      showGuestView(id);
+      document.title = (result.invitation.title || "Приглашение") + " — GLAVAT STUDIO";
+    } catch (error) {
+      document.body.classList.add("guest-view", "guest-error");
+      $("#guestRsvp").hidden = false;
+      showRsvpMessage(error.message || "Не удалось открыть приглашение.", true);
+      $("#guestRsvpForm").hidden = true;
     }
   }
 
+  function loadOrganizerLink() {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("manage");
+    if (!id) return false;
+    const hashMatch = window.location.hash.match(/(?:^#|&)key=([A-Za-z0-9_-]+)/);
+    let item = loadManagedInvites().find((entry) => entry.id === id);
+    if (hashMatch) {
+      const token = hashMatch[1];
+      item = { id, token, title: item?.title || "Моё приглашение", createdAt: item?.createdAt || new Date().toISOString() };
+      saveManagedInvites([item, ...loadManagedInvites().filter((entry) => entry.id !== id)]);
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+    if (!item) {
+      alert("Личная ссылка не содержит ключ доступа. Открой сохранённую ссылку организатора целиком.");
+      return true;
+    }
+    document.body.classList.add("organizer-view");
+    renderManagedInvites();
+    loadRsvps(item);
+    return true;
+  }
+
+  async function loadSharedInvitation() {
+    if (loadOrganizerLink()) return;
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("invite");
+    if (id) {
+      await loadGuestInvitation(id);
+      return;
+    }
+    const legacy = window.location.hash.match(/^#invite=(.+)$/);
+    if (legacy) {
+      try {
+        applyInvitation(decodeInvitation(legacy[1]));
+        document.body.classList.add("guest-view", "legacy-invite");
+        $("#guestRsvp").hidden = true;
+        showGuestView(null);
+      } catch (_) {
+        console.warn("Не удалось открыть старую ссылку приглашения: данные повреждены.");
+      }
+    }
+  }
+
+  $("#guestRsvpForm").addEventListener("change", (event) => {
+    if (event.target.name === "attendance") {
+      $("#guestCountField").hidden = event.target.value !== "yes";
+    }
+  });
+
+  $("#guestRsvpForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!currentInviteId) return;
+    const form = new FormData(event.currentTarget);
+    const payload = {
+      name: String(form.get("name") || "").trim(),
+      attendance: String(form.get("attendance") || ""),
+      guests: Number(form.get("guests") || 0),
+      comment: String(form.get("comment") || "").trim()
+    };
+    const button = $("#guestRsvpSubmit");
+    button.disabled = true;
+    button.textContent = "Отправляю…";
+    try {
+      await apiRequest("/api/invites/" + encodeURIComponent(currentInviteId) + "/rsvps", {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+      showRsvpMessage("Спасибо! Твой ответ сохранён. Организатор его уже увидит.");
+      event.currentTarget.reset();
+      $("#guestCountField").hidden = false;
+    } catch (error) {
+      showRsvpMessage(error.message, true);
+    } finally {
+      button.disabled = false;
+      button.textContent = "Отправить ответ";
+    }
+  });
+
   renderSavedInvites();
+  renderManagedInvites();
   loadSharedInvitation();
 
   function downloadInvitation() {
