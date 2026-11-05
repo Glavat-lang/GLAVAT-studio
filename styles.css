@@ -585,3 +585,66 @@ body{background:#101010;color:#f0ede7}
   .live-invite{animation:party-glow 8s ease-in-out infinite}
 }
 @media(prefers-reduced-motion:reduce){.live-invite{animation:none!important}.template-card:hover .template-visual{transform:none}}
+
+
+/* Читаемость редактора: увеличенная типографика от блока «Создай своё» */
+#create .section-kicker{font-size:12px;letter-spacing:1.8px;line-height:1.6}
+#create .editor-heading h2{font-size:clamp(44px,5vw,64px);line-height:1.16}
+#create .editor-heading>p{font-size:15px;line-height:1.8;max-width:360px}
+#create .editor-tab{font-size:14px;line-height:1.5}
+#create .field-group label{font-size:14px;line-height:1.45;margin-bottom:10px}
+#create .field-group input,
+#create .field-group textarea{font-size:16px;line-height:1.5;padding:14px 15px}
+#create .field-group textarea{min-height:100px}
+#create .field-hint,
+#create .photo-upload-note{font-size:12px;line-height:1.55}
+#create .look-choice{font-size:12px;line-height:1.35;padding:10px}
+#create .motion-choice{font-size:12px;line-height:1.35;padding:10px 12px}
+#create .style-select{font-size:14px;padding:14px 15px}
+#create .color-choice{width:30px;height:30px}
+#create .editor-disclaimer{font-size:12px;line-height:1.65}
+#create .export-button,
+#create .editor-actions .button{font-size:14px;line-height:1.45;padding:16px 18px}
+#create .preview-label{font-size:11px;letter-spacing:1.3px}
+#create .preview-footnote{font-size:11px;line-height:1.5}
+#create .share-result>label,
+#create .saved-heading{font-size:12px;line-height:1.5}
+#create .share-link-row input{font-size:14px;padding:12px}
+#create .share-link-row button{font-size:13px;padding:12px}
+#create .share-result p,
+#create .organizer-dashboard-launch p,
+#create .owner-link-details summary{font-size:12px;line-height:1.6}
+#create .managed-invites,
+#create .managed-invites button{font-size:13px}
+#create .rsvp-manager{font-size:14px}
+#create .rsvp-summary span{font-size:11px;line-height:1.4}
+#create .rsvp-response strong{font-size:14px}
+#create .rsvp-response>div span{font-size:12px}
+#create .rsvp-response p{font-size:13px;line-height:1.6}
+#create .rsvp-response small{font-size:11px}
+#create .danger-action{font-size:13px}
+#create .live-invite h3{font-size:40px}
+#create .live-invite p{font-size:15px;line-height:1.75}
+#create .live-meta{font-size:10px;line-height:1.5}
+#create .live-top{font-size:9px}
+#create .live-footer{font-size:9px}
+@media(max-width:800px){
+  #create .editor-heading>p{font-size:15px}
+  #create .editor-tab{font-size:14px}
+}
+@media(max-width:560px){
+  #create .section-kicker{font-size:11px}
+  #create .editor-heading h2{font-size:46px}
+  #create .editor-heading>p{font-size:14px}
+  #create .editor-panel{padding:26px 20px}
+  #create .field-group label{font-size:14px}
+  #create .field-group input,
+  #create .field-group textarea{font-size:16px;padding:14px}
+  #create .field-hint{font-size:12px}
+  #create .look-choice,
+  #create .motion-choice{font-size:12px}
+  #create .editor-disclaimer{font-size:12px}
+  #create .share-link-row input{font-size:13px}
+  #create .share-link-row button{font-size:12px}
+  #create .live-invite h3{font-size:36px}
+}
