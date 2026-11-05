@@ -483,7 +483,11 @@ document.querySelectorAll(".font-choice").forEach((button) => {
 
   $("#downloadRsvpCsv").addEventListener("click", () => {
     if (!selectedManagedInvite) return;
-    const quote = (value) => '"' + String(value ?? "").replace(/"/g, '""') + '"';
+    const quote = (value) => {
+      const raw = String(value ?? "");
+      const safe = /^[=+\\-@\\t\\r]/.test(raw) ? "'" + raw : raw;
+      return '"' + safe.replace(/"/g, '""') + '"';
+    };
     const rows = [
       ["Имя", "Ответ", "Количество гостей", "Комментарий", "Дата ответа"],
       ...currentRsvps.map((item) => [
