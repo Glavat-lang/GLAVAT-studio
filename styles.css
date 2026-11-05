@@ -390,3 +390,50 @@ body{background:#101010;color:#f0ede7}
 @keyframes classic-drift{0%,100%{transform:translateY(14px);opacity:.2}50%{transform:translateY(-20px);opacity:.95}}
 @keyframes twinkle{0%,100%{transform:scale(.3);opacity:.1}50%{transform:scale(2);opacity:1}}
 @media(prefers-reduced-motion:reduce){.scene-effects,.scene-effects i{animation:none!important;opacity:.22!important}}
+
+
+/* Точная типографика главной открытки: каждое слово целиком в своей строке */
+.invite-script{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;width:100%;max-width:100%;padding:0 14px;box-sizing:border-box;text-align:center;white-space:nowrap;overflow:visible;overflow-wrap:normal;word-break:keep-all;font-size:clamp(30px,3.4vw,40px);line-height:1.02;letter-spacing:-1.25px}
+.invite-script span{display:block;max-width:100%;white-space:nowrap;word-break:keep-all;overflow-wrap:normal}
+
+/* Новоселье — никаких рамок и окружностей вокруг текста */
+.theme-botanical::before,.theme-botanical::after,.housewarming-visual::before,.housewarming-visual::after{content:none!important;display:none!important;border:0!important;outline:0!important;box-shadow:none!important}
+
+/* Встреча — скользящие лучи ночного города, а не россыпь одинаковых частиц */
+.scene-noir .scene-effects i{width:2px;height:68%;top:16%;border-radius:100%;background:linear-gradient(180deg,transparent,#9ce4e2 35%,#f4c88b 60%,transparent);box-shadow:0 0 12px #8ce1e080;filter:none;animation:meeting-beam 6.5s cubic-bezier(.45,0,.35,1) infinite}
+.scene-noir .scene-effects i:nth-child(2n){width:1px;height:38%;top:30%;background:linear-gradient(180deg,transparent,#f5d8a4,transparent);animation-name:meeting-glint;animation-duration:4.5s}
+.scene-noir .scene-effects i:nth-child(3n){width:34px;height:2px;top:50%;border-radius:50%;filter:blur(1px);background:linear-gradient(90deg,transparent,#b8f3ed,transparent);animation:meeting-sweep 7s ease-in-out infinite}
+.scene-noir .scene-effects::before{content:"";position:absolute;inset:-20% auto -20% -35%;width:32%;background:linear-gradient(90deg,transparent,#8ddcdb18,transparent);transform:skewX(-18deg);animation:meeting-wide-sweep 8s ease-in-out infinite}
+@keyframes meeting-beam{0%,100%{transform:translateY(-18px) scaleY(.55);opacity:0}30%,70%{opacity:.8}50%{transform:translateY(18px) scaleY(1.1);opacity:1}}
+@keyframes meeting-glint{0%,100%{transform:translateY(16px);opacity:0}45%,60%{opacity:.9}50%{transform:translateY(-18px)}}
+@keyframes meeting-sweep{0%,100%{transform:translateX(-28px);opacity:0}50%{transform:translateX(28px);opacity:.85}}
+@keyframes meeting-wide-sweep{0%{left:-40%;opacity:0}35%{opacity:1}75%,100%{left:115%;opacity:0}}
+
+/* Новоселье — уютные окна, в которых загорается свет */
+.scene-botanical .scene-effects i{width:10px;height:13px;top:var(--window-top,22%);border-radius:2px 2px 1px 1px;background:#fff0b7;box-shadow:0 0 13px 4px #ffe9a866;animation:window-warmth 4.8s ease-in-out infinite}
+.scene-botanical .scene-effects i:nth-child(2n){width:4px;height:4px;border-radius:50%;background:#fff9d9;box-shadow:0 0 9px 3px #fff0b7;animation:welcome-firefly 5.5s ease-in-out infinite}
+.scene-botanical .scene-effects i:nth-child(3n){width:17px;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,#d4a96c,transparent);box-shadow:none;animation:welcome-glimmer 6s ease-in-out infinite}
+.scene-botanical .scene-effects i:nth-child(4n){animation-delay:-2.7s}
+@keyframes window-warmth{0%,100%{transform:scale(.72);opacity:.18;box-shadow:0 0 4px 1px #ffe9a833}35%,65%{transform:scale(1);opacity:.95;box-shadow:0 0 18px 6px #ffe9a899}}
+@keyframes welcome-firefly{0%,100%{transform:translate(0,12px) scale(.3);opacity:0}45%,65%{transform:translate(12px,-12px) scale(1.2);opacity:.95}}
+@keyframes welcome-glimmer{0%,100%{transform:translateX(-16px) scaleX(.4);opacity:0}50%{transform:translateX(18px) scaleX(1.2);opacity:.8}}
+
+/* Семейный праздник — тёплое сияние и мягкое дыхание света */
+.scene-minimal .scene-effects i{width:18px;height:18px;border-radius:50%;background:radial-gradient(circle,#fff0c8 0%,#e9b76b66 35%,transparent 72%);box-shadow:0 0 22px 8px #ffd89a30;animation:family-glow 5s ease-in-out infinite}
+.scene-minimal .scene-effects i:nth-child(2n){width:2px;height:35%;border-radius:0;background:linear-gradient(180deg,transparent,#ffe3a8,transparent);box-shadow:none;animation:family-candle 4s ease-in-out infinite}
+.scene-minimal .scene-effects i:nth-child(3n){width:45%;height:1px;border-radius:50%;background:linear-gradient(90deg,transparent,#ffe2a0,transparent);animation:family-ray 7s ease-in-out infinite}
+.scene-minimal .scene-effects::before{content:"";position:absolute;left:50%;top:50%;width:68%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#ffe2a022,transparent 68%);transform:translate(-50%,-50%);animation:family-halo 6s ease-in-out infinite}
+@keyframes family-glow{0%,100%{transform:scale(.45);opacity:.12}50%{transform:scale(1.5);opacity:.9}}
+@keyframes family-candle{0%,100%{transform:scaleY(.35);opacity:.12}50%{transform:scaleY(1);opacity:.85}}
+@keyframes family-ray{0%,100%{transform:translateX(-28px);opacity:0}45%,60%{transform:translateX(28px);opacity:.85}}
+@keyframes family-halo{0%,100%{transform:translate(-50%,-50%) scale(.72);opacity:.2}50%{transform:translate(-50%,-50%) scale(1.12);opacity:.8}}
+
+/* Классика — медленно вращающиеся ювелирные ромбы */
+.scene-cream .scene-effects i{width:9px;height:9px;border:1px solid #d4b477;border-radius:1px;background:transparent;box-shadow:0 0 8px #d4b47755;animation:classic-diamond 7s ease-in-out infinite}
+.scene-cream .scene-effects i:nth-child(2n){width:5px;height:5px;border-color:#fff1ce;animation-duration:5s}
+.scene-cream .scene-effects i:nth-child(3n){width:2px;height:22%;border:0;background:linear-gradient(180deg,transparent,#d9bd85,transparent);box-shadow:none;animation:classic-line 6s ease-in-out infinite}
+.scene-cream .scene-effects::before{content:"";position:absolute;left:10%;right:10%;top:50%;height:1px;background:linear-gradient(90deg,transparent,#d5b67d88,transparent);transform:scaleX(.2);animation:classic-rule 8s ease-in-out infinite}
+@keyframes classic-diamond{0%,100%{transform:rotate(0) scale(.55);opacity:.15}50%{transform:rotate(135deg) scale(1.15);opacity:.9}}
+@keyframes classic-line{0%,100%{transform:translateY(14px);opacity:0}50%{transform:translateY(-14px);opacity:.7}}
+@keyframes classic-rule{0%,100%{transform:scaleX(.2);opacity:0}50%{transform:scaleX(1);opacity:.8}}
+@media(prefers-reduced-motion:reduce){.scene-effects,.scene-effects i,.scene-effects::before{animation:none!important}}
