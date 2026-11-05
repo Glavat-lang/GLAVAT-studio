@@ -27,6 +27,9 @@ async function main() {
     }
     assert.equal(health.ok, true);
 
+    const forbiddenOrigin = await fetch(base + "/healthz", { headers: { Origin: "https://not-glavat.example" } });
+    assert.equal(forbiddenOrigin.status, 403);
+
     created = await request("/api/invites", {
       method: "POST",
       body: JSON.stringify({
@@ -67,6 +70,9 @@ async function main() {
       method: "POST",
       body: JSON.stringify({ name: "Тестовый гость", attendance: "yes", guests: 2, comment: "Проверка ответа" })
     });
+
+    const noOwnerAccess = await fetch(base + "/api/invites/" + encodeURIComponent(created.id) + "/rsvps", { headers });
+    assert.equal(noOwnerAccess.status, 401);
 
     const ownerData = await request("/api/invites/" + encodeURIComponent(created.id) + "/rsvps", {
       headers: { Authorization: "Bearer " + created.ownerToken }
