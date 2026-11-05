@@ -575,8 +575,8 @@ document.querySelectorAll(".font-choice").forEach((button) => {
       try {
         applyInvitation(decodeInvitation(legacy[1]));
         document.body.classList.add("guest-view", "legacy-invite");
-        $("#guestRsvp").hidden = true;
         showGuestView(null);
+        $("#guestRsvp").hidden = true;
       } catch (_) {
         console.warn("Не удалось открыть старую ссылку приглашения: данные повреждены.");
       }
