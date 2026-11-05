@@ -8,6 +8,7 @@ Private backend for public invitations and guest RSVP responses.
 - `POST /api/invites` — create an invitation; returns a public ID and a one-time owner token.
 - `GET /api/invites/:id` — read a public invitation.
 - `POST /api/invites/:id/rsvps` — submit a guest response.
+- `PUT /api/invites/:id` — update an invitation (owner token required).
 - `GET /api/invites/:id/rsvps` — list responses (owner token required).
 - `DELETE /api/invites/:id` — delete an invitation and its responses (owner token required).
 
