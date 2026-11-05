@@ -25,7 +25,6 @@
     caveat: "'Caveat', cursive",
     pacifico: "'Pacifico', cursive"
   };
-  let imageData = "";
   let mode = "template";
 
   const escapeHTML = (value) => String(value).replace(/[&<>"']/g, (char) => ({
@@ -49,10 +48,6 @@
     document.querySelectorAll(".font-choice").forEach((button) => button.classList.toggle("active", button.dataset.font === currentFont));
     $("#eventStyle").value = currentTheme;
     document.querySelectorAll(".look-choice").forEach((button) => button.classList.toggle("active", button.dataset.theme === currentTheme));
-    const previewPhoto = $("#previewPhoto");
-    previewPhoto.src = imageData;
-    previewPhoto.hidden = !imageData;
-    $("#removePhoto").hidden = !imageData;
   }
 
   Object.values(fields).forEach((field) => field.addEventListener("input", updatePreview));
@@ -156,67 +151,13 @@ document.querySelectorAll(".font-choice").forEach((button) => {
   });
 
 
-  $("#eventPhoto").addEventListener("change", (event) => {
-    const file = event.target.files && event.target.files[0];
-    if (!file) return;
-    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
-      alert("Выбери изображение в формате JPG, PNG или WEBP.");
-      event.target.value = "";
-      return;
-    }
-    if (file.size > 10 * 1024 * 1024) {
-      alert("Файл слишком большой. Максимальный размер исходного фото — 10 МБ.");
-      event.target.value = "";
-      return;
-    }
-    const objectUrl = URL.createObjectURL(file);
-    const source = new Image();
-    source.onload = () => {
-      const maxSide = 1000;
-      const scale = Math.min(1, maxSide / Math.max(source.width, source.height));
-      const canvas = document.createElement("canvas");
-      canvas.width = Math.max(1, Math.round(source.width * scale));
-      canvas.height = Math.max(1, Math.round(source.height * scale));
-      const context = canvas.getContext("2d");
-      context.drawImage(source, 0, 0, canvas.width, canvas.height);
-      let compressed = canvas.toDataURL("image/jpeg", 0.7);
-      if (compressed.length > 180000) {
-        const smallerScale = 800 / Math.max(canvas.width, canvas.height);
-        const smaller = document.createElement("canvas");
-        smaller.width = Math.max(1, Math.round(canvas.width * Math.min(1, smallerScale)));
-        smaller.height = Math.max(1, Math.round(canvas.height * Math.min(1, smallerScale)));
-        smaller.getContext("2d").drawImage(canvas, 0, 0, smaller.width, smaller.height);
-        compressed = smaller.toDataURL("image/jpeg", 0.58);
-      }
-      URL.revokeObjectURL(objectUrl);
-      if (compressed.length > 180000) {
-        alert("Фото получилось слишком тяжёлым. Попробуй другое изображение.");
-        event.target.value = "";
-        return;
-      }
-      imageData = compressed;
-      updatePreview();
-    };
-    source.onerror = () => {
-      URL.revokeObjectURL(objectUrl);
-      alert("Не удалось открыть это изображение. Попробуй другой файл.");
-      event.target.value = "";
-    };
-    source.src = objectUrl;
-  });
-
-  $("#removePhoto").addEventListener("click", () => {
-    imageData = "";
-    $("#eventPhoto").value = "";
-    updatePreview();
-  });
-
   const STORAGE_KEY = "glavat-studio-invitations-v1";
   const MANAGED_KEY = "glavat-studio-managed-v1";
   const API_BASE = "https://glavat-studio-api-production.up.railway.app";
   const shareResult = $("#shareResult");
   const shareLinkInput = $("#shareLink");
   const ownerLinkInput = $("#ownerLink");
+  const ownerDashboardButton = $("#ownerDashboardButton");
   let currentInviteId = null;
   let selectedManagedInvite = null;
   let currentRsvps = [];
@@ -229,8 +170,7 @@ document.querySelectorAll(".font-choice").forEach((button) => {
       time: fields.time.value,
       place: fields.place.value.trim(),
       theme: currentTheme,
-      font: currentFont,
-      image: imageData
+      font: currentFont
     };
   }
 
@@ -258,7 +198,7 @@ document.querySelectorAll(".font-choice").forEach((button) => {
     fields.place.value = String(data.place || "").slice(0, 100);
     currentTheme = themes.includes(data.theme) ? data.theme : "cream";
     currentFont = FONT_FAMILIES[data.font] ? data.font : "playfair";
-    imageData = typeof data.image === "string" && data.image.length <= 180000 && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(data.image) ? data.image : "";
+    // Старые приглашения с фотографиями открываются без изображения.
     document.querySelectorAll(".font-choice").forEach((button) => button.classList.toggle("active", button.dataset.font === currentFont));
     document.querySelectorAll(".look-choice").forEach((button) => button.classList.toggle("active", button.dataset.theme === currentTheme));
     updatePreview();
@@ -430,6 +370,7 @@ document.querySelectorAll(".font-choice").forEach((button) => {
       ownerUrl.hash = "key=" + created.ownerToken;
       shareLinkInput.value = guestUrl.toString();
       ownerLinkInput.value = ownerUrl.toString();
+      ownerDashboardButton.href = ownerUrl.toString();
       shareResult.hidden = false;
       shareResult.scrollIntoView({ behavior: "smooth", block: "nearest" });
       $("#createInviteLink").textContent = "Ссылка создана";
@@ -636,7 +577,6 @@ document.querySelectorAll(".font-choice").forEach((button) => {
     const place = fields.place.value.trim() || "МЕСТО ВСТРЕЧИ";
     const fontFamily = FONT_FAMILIES[currentFont] || FONT_FAMILIES.playfair;
     const palette = { cream:["#f4ead8","#493a2c"], wine:["#572238","#f8e7dc"], night:["#171b3b","#fff0d8"], noir:["#182b35","#e8f0ec"], botanical:["#dce8d3","#354d3b"], minimal:["#a85f35","#fff0d9"] }[currentTheme] || ["#f4ead8","#493a2c"];
-    const photoMarkup = imageData ? `<img class="photo" src="${imageData}" alt="Фотография">` : "";
     const exportTheme = "theme-" + currentTheme;
     const exportEffects = `<div class="scene-effects" aria-hidden="true">${"<i></i>".repeat(16)}</div>`;
     const documentText = `<!doctype html>
@@ -649,7 +589,7 @@ document.querySelectorAll(".font-choice").forEach((button) => {
 @keyframes window-warmth{0%,100%{transform:scale(.72);opacity:.18;box-shadow:0 0 4px 1px #ffe9a833}35%,65%{transform:scale(1);opacity:.95;box-shadow:0 0 18px 6px #ffe9a899}}@keyframes welcome-firefly{0%,100%{transform:translate(0,12px) scale(.3);opacity:0}45%,65%{transform:translate(12px,-12px) scale(1.2);opacity:.95}}@keyframes welcome-glimmer{0%,100%{transform:translateX(-16px) scaleX(.4);opacity:0}50%{transform:translateX(18px) scaleX(1.2);opacity:.8}}
 @keyframes family-glow{0%,100%{transform:scale(.45);opacity:.12}50%{transform:scale(1.5);opacity:.9}}@keyframes family-candle{0%,100%{transform:scaleY(.35);opacity:.12}50%{transform:scaleY(1);opacity:.85}}@keyframes family-ray{0%,100%{transform:translateX(-28px);opacity:0}45%,60%{transform:translateX(28px);opacity:.85}}@keyframes family-halo{0%,100%{transform:scale(.72);opacity:.2}50%{transform:scale(1.12);opacity:.8}}
 @keyframes classic-diamond{0%,100%{transform:rotate(0) scale(.55);opacity:.15}50%{transform:rotate(135deg) scale(1.15);opacity:.9}}@keyframes classic-line{0%,100%{transform:translateY(14px);opacity:0}50%{transform:translateY(-14px);opacity:.7}}@keyframes classic-rule{0%,100%{transform:scaleX(.2);opacity:0}50%{transform:scaleX(1);opacity:.8}}
-</style></head><body><main class="${exportTheme} scene-${currentTheme}">${exportEffects}${photoMarkup}<h1>${escapeHTML(title)}</h1><p>${escapeHTML(text).replace(/\n/g, "<br>")}</p><div class="rule"></div><div class="meta"><span>${escapeHTML(date)}</span><span>${escapeHTML(time)}</span><span>${escapeHTML(place)}</span></div><div class="bottom">С НЕТЕРПЕНИЕМ ЖДУ ТЕБЯ</div></main></body></html>`;
+</style></head><body><main class="${exportTheme} scene-${currentTheme}">${exportEffects}<h1>${escapeHTML(title)}</h1><p>${escapeHTML(text).replace(/\n/g, "<br>")}</p><div class="rule"></div><div class="meta"><span>${escapeHTML(date)}</span><span>${escapeHTML(time)}</span><span>${escapeHTML(place)}</span></div><div class="bottom">С НЕТЕРПЕНИЕМ ЖДУ ТЕБЯ</div></main></body></html>`;
     const blob = new Blob([documentText], { type: "text/html;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
