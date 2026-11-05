@@ -255,7 +255,12 @@
     }
     const saved = loadSavedInvites();
     saved.unshift({ id: String(Date.now()), ...data });
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(saved.slice(0, 20)));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(saved.slice(0, 10)));
+    } catch (_) {
+      alert("Не удалось сохранить черновик: хранилище браузера заполнено. Удали несколько старых черновиков и попробуй снова.");
+      return;
+    }
     renderSavedInvites();
     $("#saveInvite").innerHTML = "Сохранено <span>✓</span>";
     window.setTimeout(() => { $("#saveInvite").innerHTML = "Сохранить черновик <span>↓</span>"; }, 1800);
