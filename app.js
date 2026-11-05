@@ -318,7 +318,12 @@ document.querySelectorAll(".font-choice").forEach((button) => {
     const encoded = encodeInvitation(data);
     const url = new URL(window.location.href);
     url.hash = "invite=" + encoded;
-    shareLinkInput.value = url.toString();
+    const shareUrl = url.toString();
+    if (shareUrl.length > 80000) {
+      alert("Ссылка получилась слишком длинной. Убери фотографию или выбери изображение поменьше, затем создай ссылку снова.");
+      return;
+    }
+    shareLinkInput.value = shareUrl;
     shareResult.hidden = false;
     shareResult.scrollIntoView({ behavior: "smooth", block: "nearest" });
   });
@@ -385,19 +390,23 @@ document.querySelectorAll(".font-choice").forEach((button) => {
 
   $("#downloadInvite").addEventListener("click", downloadInvitation);
 
-  $(".menu-toggle").addEventListener("click", () => {
-    const nav = $(".desktop-nav");
-    const isOpen = nav.style.display === "flex";
-    nav.style.display = isOpen ? "none" : "flex";
-    nav.style.position = "absolute";
-    nav.style.zIndex = "10";
-    nav.style.top = "100px";
-    nav.style.right = "6%";
-    nav.style.padding = "20px";
-    nav.style.background = "#fffaf6";
-    nav.style.boxShadow = "0 12px 35px #30262618";
-    nav.style.flexDirection = "column";
-    nav.style.gap = "18px";
+  const menuButton = $(".menu-toggle");
+  const nav = $(".desktop-nav");
+  const closeMenu = () => {
+    nav.classList.remove("is-open");
+    menuButton.setAttribute("aria-expanded", "false");
+  };
+  menuButton.setAttribute("aria-expanded", "false");
+  menuButton.addEventListener("click", () => {
+    const isOpen = nav.classList.toggle("is-open");
+    menuButton.setAttribute("aria-expanded", String(isOpen));
+  });
+  nav.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeMenu));
+  document.addEventListener("click", (event) => {
+    if (!nav.contains(event.target) && !menuButton.contains(event.target)) closeMenu();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeMenu();
   });
 
   updatePreview();
