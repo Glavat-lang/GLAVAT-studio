@@ -25,7 +25,13 @@ jobs:
         with:
           enablement: true
       - name: Check JavaScript syntax
-        run: node --check app.js
+        run: |
+          node --check app.js
+          node --check api/server.js
+      - name: Install API dependencies
+        run: npm install --prefix api --no-audit --no-fund
+      - name: Test API validation
+        run: npm test --prefix api
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:
