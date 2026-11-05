@@ -8,10 +8,12 @@
     place: $("#eventPlace")
   };
   const preview = $("#liveInvite");
-  const themes = ["cream", "rose", "wine", "night"];
+  const themes = ["cream", "rose", "wine", "night", "noir", "anime", "cyber", "gothic", "botanical", "retro", "ocean", "minimal"];
+  const animations = ["none", "fade", "float", "glow", "reveal", "pulse", "sakura"];
   let currentTheme = "cream";
   let currentFont = "serif";
   let imageData = "";
+  let currentAnimation = "fade";
   let mode = "template";
 
   const escapeHTML = (value) => String(value).replace(/[&<>"']/g, (char) => ({
@@ -30,7 +32,9 @@
     $("#previewDate").textContent = formattedDate(fields.date.value);
     $("#previewTime").textContent = fields.time.value || "ВРЕМЯ";
     $("#previewPlace").textContent = fields.place.value.trim().toUpperCase() || "МЕСТО ВСТРЕЧИ";
-    preview.className = "live-invite theme-" + currentTheme + " font-" + currentFont;
+    preview.className = "live-invite theme-" + currentTheme + " font-" + currentFont + " anim-" + currentAnimation;
+    $("#eventStyle").value = currentTheme;
+    $("#eventAnimation").value = currentAnimation;
     const previewPhoto = $("#previewPhoto");
     previewPhoto.src = imageData;
     previewPhoto.hidden = !imageData;
@@ -66,7 +70,8 @@
     $(".editor-tab[data-mode='template']").classList.add("active");
     $(".editor-tab[data-mode='scratch']").classList.remove("active");
     mode = "template";
-    document.querySelectorAll(".color-choice").forEach((button) => button.classList.toggle("active", button.dataset.color === currentTheme));
+    $("#eventStyle").value = currentTheme;
+    $("#eventAnimation").value = currentAnimation;
     updatePreview();
     $("#create").scrollIntoView({ behavior: "smooth", block: "start" });
   }
@@ -96,15 +101,10 @@
     });
   });
 
-  document.querySelectorAll(".color-choice").forEach((button) => {
-    button.addEventListener("click", () => {
-      currentTheme = themes.includes(button.dataset.color) ? button.dataset.color : "cream";
-      document.querySelectorAll(".color-choice").forEach((item) => item.classList.toggle("active", item === button));
-      updatePreview();
-    });
-  });
+  $("#eventStyle").addEventListener("change", () => { currentTheme = themes.includes($("#eventStyle").value) ? $("#eventStyle").value : "cream"; updatePreview(); });
+  $("#eventAnimation").addEventListener("change", () => { currentAnimation = animations.includes($("#eventAnimation").value) ? $("#eventAnimation").value : "none"; updatePreview(); });
 
-  document.querySelectorAll(".font-choice").forEach((button) => {
+document.querySelectorAll(".font-choice").forEach((button) => {
     button.addEventListener("click", () => {
       currentFont = ["serif", "sans", "classic"].includes(button.dataset.font) ? button.dataset.font : "serif";
       document.querySelectorAll(".font-choice").forEach((item) => item.classList.toggle("active", item === button));
@@ -181,6 +181,7 @@
       place: fields.place.value.trim(),
       theme: currentTheme,
       font: currentFont,
+      animation: currentAnimation,
       image: imageData
     };
   }
@@ -208,6 +209,7 @@
     fields.time.value = /^\d{2}:\d{2}$/.test(data.time || "") ? data.time : "";
     fields.place.value = String(data.place || "").slice(0, 100);
     currentTheme = themes.includes(data.theme) ? data.theme : "cream";
+    currentAnimation = animations.includes(data.animation) ? data.animation : "fade";
     currentFont = ["serif", "sans", "classic"].includes(data.font) ? data.font : "serif";
     imageData = typeof data.image === "string" && data.image.length <= 180000 && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(data.image) ? data.image : "";
     document.querySelectorAll(".font-choice").forEach((button) => button.classList.toggle("active", button.dataset.font === currentFont));
@@ -314,15 +316,12 @@
     const time = fields.time.value || "ВРЕМЯ УТОЧНИМ";
     const place = fields.place.value.trim() || "МЕСТО ВСТРЕЧИ";
     const fontFamily = { serif: "'Playfair Display', Georgia, serif", sans: "'DM Sans', Arial, sans-serif", classic: "Georgia, serif" }[currentFont] || "'Playfair Display', Georgia, serif";
-    const palette = {
-      cream: ["#eadbd2", "#67474a"],
-      rose: ["#d9aaa8", "#673e49"],
-      wine: ["#693442", "#f8e9df"],
-      night: ["#30313b", "#f5e9df"]
-    }[currentTheme];
+    const palette = { cream:["#eadbd2","#67474a"], rose:["#d9aaa8","#673e49"], wine:["#693442","#f8e9df"], night:["#30313b","#f5e9df"], noir:["#171717","#f1eee8"], anime:["#f8c9df","#49304f"], cyber:["#101b2c","#70f6ff"], gothic:["#241923","#e6c5d2"], botanical:["#dce5d4","#405b49"], retro:["#e8cda4","#634735"], ocean:["#c5e1e8","#244d63"], minimal:["#f4f1eb","#343434"] }[currentTheme] || ["#eadbd2","#67474a"];
     const photoMarkup = imageData ? `<img class="photo" src="${imageData}" alt="Фотография">` : "";
+    const exportTheme = "theme-" + currentTheme;
+    const exportAnimation = currentAnimation === "none" ? "" : " anim-" + currentAnimation;
     const documentText = `<!doctype html>
-<html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escapeHTML(title)}</title><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet"><style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:#f7f2ed;font-family:Georgia,serif;color:${palette[1]}}main{width:min(100%,440px);min-height:560px;padding:42px 30px;background:${palette[0]};display:flex;flex-direction:column;align-items:center;text-align:center;box-shadow:0 20px 70px #30262618}.photo{width:100%;max-height:190px;object-fit:cover;margin:24px 0 0}.top,.meta,.bottom{font:9px Arial,sans-serif;letter-spacing:2px}.top{width:100%;display:flex;justify-content:space-between}.symbol{font-size:38px;margin:65px 0 25px}h1{font:italic 42px/1.12 ${fontFamily};font-weight:400;margin:0 0 24px}p{font:17px/1.7 ${fontFamily};max-width:320px}.rule{height:1px;width:70%;background:currentColor;opacity:.35;margin:30px 0 24px}.meta{display:grid;gap:13px}.bottom{margin-top:auto;padding-top:50px}@media(max-width:420px){main{min-height:520px;padding:30px 20px}h1{font-size:36px}}</style></head><body><main><div class="top"><span>A SPECIAL INVITATION</span><span>✳</span></div>${photoMarkup}<div class="symbol">✳</div><h1>${escapeHTML(title)}</h1><p>${escapeHTML(text).replace(/\n/g, "<br>")}</p><div class="rule"></div><div class="meta"><span>${escapeHTML(date)}</span><span>${escapeHTML(time)}</span><span>${escapeHTML(place)}</span></div><div class="bottom">С НЕТЕРПЕНИЕМ ЖДУ ТЕБЯ</div></main></body></html>`;
+<html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escapeHTML(title)}</title><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet"><style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:#f7f2ed;font-family:Georgia,serif;color:${palette[1]}}main{width:min(100%,440px);min-height:560px;padding:42px 30px;background:${palette[0]};display:flex;flex-direction:column;align-items:center;text-align:center;box-shadow:0 20px 70px #30262618}.photo{width:100%;max-height:190px;object-fit:cover;margin:24px 0 0}.top,.meta,.bottom{font:9px Arial,sans-serif;letter-spacing:2px}.top{width:100%;display:flex;justify-content:space-between}.symbol{font-size:38px;margin:65px 0 25px}h1{font:italic 42px/1.12 ${fontFamily};font-weight:400;margin:0 0 24px}p{font:17px/1.7 ${fontFamily};max-width:320px}.rule{height:1px;width:70%;background:currentColor;opacity:.35;margin:30px 0 24px}.meta{display:grid;gap:13px}.bottom{margin-top:auto;padding-top:50px}@media(max-width:420px){main{min-height:520px;padding:30px 20px}h1{font-size:36px}}.theme-noir{background:linear-gradient(135deg,#111,#292929 55%,#090909);color:#f1eee8}.theme-anime{background:linear-gradient(145deg,#ffd7e8,#b7d9ff);color:#49304f}.theme-cyber{background:radial-gradient(circle at top,#263c64,#101b2c 70%);color:#70f6ff}.theme-gothic{background:linear-gradient(145deg,#241923,#563044);color:#e6c5d2}.theme-botanical{background:linear-gradient(145deg,#dce5d4,#b9cbb3);color:#405b49}.theme-retro{background:linear-gradient(135deg,#f1d9b4,#dfbd91);color:#634735}.theme-ocean{background:linear-gradient(145deg,#c5e1e8,#82b5c5);color:#244d63}.theme-minimal{background:#f4f1eb;color:#343434}.anim-fade{animation:fadeIn 1s ease both}.anim-float,.anim-sakura{animation:floatCard 4s ease-in-out infinite}.anim-glow{animation:glowCard 3s ease-in-out infinite alternate}.anim-reveal{animation:revealCard 1.1s ease both}.anim-pulse{animation:pulseCard 2.8s ease-in-out infinite}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes floatCard{50%{transform:translateY(-9px)}}@keyframes glowCard{to{box-shadow:0 0 35px #d99bca88}}@keyframes revealCard{from{opacity:0;transform:translateY(25px) scale(.97);filter:blur(5px)}to{opacity:1;transform:none;filter:none}}@keyframes pulseCard{50%{filter:brightness(1.08)}}@media(prefers-reduced-motion:reduce){main{animation:none!important}}</style></head><body><main class="${exportTheme}${exportAnimation}"><div class="top"><span>A SPECIAL INVITATION</span><span>✳</span></div>${photoMarkup}<div class="symbol">✳</div><h1>${escapeHTML(title)}</h1><p>${escapeHTML(text).replace(/\n/g, "<br>")}</p><div class="rule"></div><div class="meta"><span>${escapeHTML(date)}</span><span>${escapeHTML(time)}</span><span>${escapeHTML(place)}</span></div><div class="bottom">С НЕТЕРПЕНИЕМ ЖДУ ТЕБЯ</div></main></body></html>`;
     const blob = new Blob([documentText], { type: "text/html;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
