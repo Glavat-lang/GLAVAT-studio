@@ -21,18 +21,13 @@ const FONTS = new Set([
 const ATTENDANCE = new Set(["yes", "no", "maybe"]);
 const rateBuckets = new Map();
 
-if (!DATABASE_URL) {
-  console.error("DATABASE_URL is required");
-  process.exit(1);
-}
-
-const pool = new Pool({
+const pool = DATABASE_URL ? new Pool({
   connectionString: DATABASE_URL,
   ssl: { rejectUnauthorized: false },
   max: 10,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 10000
-});
+}) : null;
 
 function jsonError(res, status, error, message) {
   return res.status(status).json({ error, message });
@@ -239,6 +234,7 @@ app.use((error, _req, res, _next) => {
 });
 
 async function start() {
+  if (!DATABASE_URL || !pool) throw new Error("DATABASE_URL is required");
   let connected = false;
   for (let attempt = 1; attempt <= 12; attempt += 1) {
     try {
@@ -271,9 +267,11 @@ async function start() {
   app.listen(PORT, "0.0.0.0", () => console.log(`GLAVAT STUDIO API listening on ${PORT}`));
 }
 
-start().catch((error) => {
-  console.error("API startup failed:", error.message);
-  process.exit(1);
-});
+if (require.main === module) {
+  start().catch((error) => {
+    console.error("API startup failed:", error.message);
+    process.exit(1);
+  });
+}
 
-module.exports = { normalizeInvitation, hashToken, safeEqualHex };
+module.exports = { normalizeInvitation, hashToken, safeEqualHex, start };
