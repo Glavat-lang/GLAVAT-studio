@@ -528,3 +528,60 @@ body{background:#101010;color:#f0ede7}
 .guest-privacy-note{margin:4px 0 0;color:#a99f92;font-size:9px;line-height:1.5}
 
 .organizer-help{font-size:9px;line-height:1.6;color:#c9c0b4;margin:10px 0 14px}
+
+
+/* GLAVAT STUDIO — праздничное обновление палитр и живых эффектов */
+.theme-cream{background:radial-gradient(circle at 15% 12%,#fff7df 0%,transparent 34%),linear-gradient(145deg,#fff0d6 0%,#ffd6cf 52%,#f8b8cb 100%);color:#603b4b}
+.theme-wine{background:radial-gradient(circle at 18% 12%,#ffb7c9 0%,transparent 36%),radial-gradient(circle at 88% 82%,#ffcf87 0%,transparent 34%),linear-gradient(145deg,#a72d62 0%,#72275f 55%,#3c245b 100%);color:#fff7ef}
+.theme-night{background:radial-gradient(circle at 50% 0%,#8b5cf6 0%,transparent 42%),linear-gradient(145deg,#252b83 0%,#4338a8 48%,#b43b88 100%);color:#fff9e8}
+.theme-noir{background:radial-gradient(circle at 12% 12%,#5eead4 0%,transparent 35%),linear-gradient(145deg,#155e75 0%,#176b83 48%,#294c9b 100%);color:#f0fffb}
+.theme-botanical{background:radial-gradient(circle at 90% 10%,#fff0a8 0%,transparent 35%),linear-gradient(145deg,#d7f7d5 0%,#a8e6cf 48%,#83c9b9 100%);color:#24564a}
+.theme-minimal{background:radial-gradient(circle at 12% 8%,#ffe29b 0%,transparent 34%),linear-gradient(145deg,#ffb36b 0%,#ff8d8d 50%,#dc6ab1 100%);color:#fffaf1}
+.swatch-cream{background:linear-gradient(135deg,#fff0d6,#f8b8cb)}
+.swatch-wine{background:linear-gradient(135deg,#a72d62,#ffb7c9)}
+.swatch-night{background:linear-gradient(135deg,#252b83,#b43b88)}
+.swatch-noir{background:linear-gradient(135deg,#155e75,#5eead4)}
+.swatch-botanical{background:linear-gradient(135deg,#d7f7d5,#83c9b9)}
+.swatch-minimal{background:linear-gradient(135deg,#ffb36b,#dc6ab1)}
+.wedding-visual{background:radial-gradient(circle at 50% 22%,#ff9fbd,#a72d62 72%);color:#fff7ef}
+.birthday-visual{background:radial-gradient(circle at 50% 20%,#a78bfa,#252b83 74%);color:#fff9e8}
+.birthday-visual strong{color:#ffe48f;text-shadow:0 3px 22px #ff8fba88}
+.meeting-visual{background:linear-gradient(145deg,#36cfc2,#176b83 62%,#294c9b);color:#f0fffb}
+.meeting-visual em{color:#c7fff4}
+.classic-visual{background:linear-gradient(145deg,#fff0d6,#ffd6cf 58%,#f8b8cb);color:#603b4b}
+.classic-visual em{color:#a34c69}
+.housewarming-visual{background:linear-gradient(145deg,#d7f7d5,#a8e6cf 55%,#83c9b9);color:#24564a}
+.family-visual{background:linear-gradient(145deg,#ffcf87,#ff8d8d 55%,#dc6ab1);color:#fffaf1}
+.template-card:hover{border-color:#ff9fbd;box-shadow:0 16px 38px #ff9fbd20}
+.template-number{color:#ffc1d1}
+.template-footer b{color:#ffd18b}
+.live-invite{box-shadow:0 24px 70px #3b21402b}
+.scene-night .scene-effects i{box-shadow:0 0 18px currentColor,0 0 28px #ffb6db88}
+.scene-night .scene-effects i:nth-child(2n){background:#8ff7ef}
+.scene-night .scene-effects i:nth-child(3n){background:#ffd86b}
+.scene-wine .scene-effects i{background:linear-gradient(145deg,#fff9df,#ff8fbd);box-shadow:0 0 18px #ffc2d888}
+.scene-noir .scene-effects i{box-shadow:0 0 16px #7df9edaa}
+.scene-botanical .scene-effects i{box-shadow:0 0 18px 5px #fff0a888}
+.scene-minimal .scene-effects i{box-shadow:0 0 28px 10px #fff0b866}
+.scene-cream .scene-effects i{box-shadow:0 0 15px 4px #ffb8cf99}
+@keyframes party-sparkle{0%,100%{transform:translateY(8px) scale(.35) rotate(0);opacity:.08}45%{transform:translateY(-15px) scale(1.35) rotate(130deg);opacity:1}}
+@keyframes party-bounce{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-22px) rotate(12deg)}}
+@keyframes party-glow{0%,100%{filter:saturate(1) brightness(1)}50%{filter:saturate(1.35) brightness(1.12)}}
+.scene-night .scene-effects i:nth-child(4n){animation-name:party-sparkle;animation-duration:2.4s}
+.scene-wine .scene-effects i:nth-child(5n){animation-duration:4s;animation-delay:-1.4s}
+.scene-minimal .scene-effects i:nth-child(4n){animation-name:party-sparkle;animation-duration:2.8s}
+.template-visual{transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
+.template-card:hover .template-visual{transform:translateY(-5px) scale(1.015)}
+.template-card:active .template-visual{transform:scale(.985)}
+.organizer-dashboard-launch{margin-top:18px;padding:16px;background:linear-gradient(135deg,#fff0d6,#ffd6e5);border:1px solid #e9a9c0}
+.organizer-dashboard-button{display:flex;align-items:center;justify-content:center;width:100%;box-sizing:border-box;background:linear-gradient(100deg,#b83270,#7041a6);color:#fff;border:0;text-align:center;box-shadow:0 8px 22px #9e397033}
+.organizer-dashboard-button:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.organizer-dashboard-launch p{margin:10px 0 0;color:#65465a;font-size:11px;line-height:1.55}
+.owner-link-details{margin-top:13px;padding-top:12px;border-top:1px solid #e7d9dc}
+.owner-link-details summary{cursor:pointer;color:#79566a;font-size:10px;line-height:1.5}
+.owner-link-details .share-link-row{margin-top:10px}
+@media(prefers-reduced-motion:no-preference){
+  .template-card:hover{transition:transform .3s ease,box-shadow .3s ease}
+  .live-invite{animation:party-glow 8s ease-in-out infinite}
+}
+@media(prefers-reduced-motion:reduce){.live-invite{animation:none!important}.template-card:hover .template-visual{transform:none}}
