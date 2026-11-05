@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Cinzel:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Lora:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Merriweather:wght@400;700&family=Oswald:wght@400;500;600;700&family=Pacifico&family=Playfair+Display:wght@400;500;600;700&family=Raleway:wght@400;500;600;700&family=Roboto+Slab:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261105-21">
+  <link rel="stylesheet" href="styles.css?v=20261105-22">
 </head>
 <body>
   <div class="announcement">GLAVAT STUDIO — СТУДИЯ ЦИФРОВЫХ ПРИГЛАШЕНИЙ</div>
@@ -52,7 +52,7 @@
       <div class="section-kicker">01 / НЕ ПРОСТО ПРИГЛАШЕНИЕ</div>
       <div class="intro-content"><h2>Важные моменты<br>заслуживают <em>большего.</em></h2><div><p>Создай свою маленькую цифровую открытку: с настроением, деталями и словами, которые действительно хочется сказать.</p><p>Выбери готовый стиль или начни с чистого листа. Здесь твои правила.</p></div></div>
       <div class="feature-grid">
-        <article class="feature"><span class="feature-index">01</span><h3>Твой стиль</h3><p>Цвета, фотографии, шрифты и атмосфера — всё под твой вкус.</p></article>
+        <article class="feature"><span class="feature-index">01</span><h3>Твой стиль</h3><p>Цвета, шрифты, анимации и атмосфера — всё под твой вкус.</p></article>
         <article class="feature"><span class="feature-index">02</span><h3>Твои слова</h3><p>Пиши любое приглашение. Не нужно подстраиваться под готовые фразы.</p></article>
         <article class="feature"><span class="feature-index">03</span><h3>Одна ссылка</h3><p>Поделись приглашением — гостю не нужно устанавливать приложение.</p></article>
       </div>
@@ -83,7 +83,6 @@
           <div class="field-group"><label for="eventText">Текст приглашения</label><textarea id="eventText" rows="4" maxlength="500">Есть повод собраться и провести этот день вместе. Очень хочу разделить его с тобой!</textarea><span class="field-hint">Можно написать абсолютно любой текст</span></div>
           <div class="field-row"><div class="field-group"><label for="eventDate">Дата</label><input id="eventDate" type="date"></div><div class="field-group"><label for="eventTime">Время</label><input id="eventTime" type="time" value="18:00"></div></div>
           <div class="field-group"><label for="eventPlace">Место встречи</label><input id="eventPlace" maxlength="100" placeholder="Адрес или название места"></div>
-          <div class="field-group photo-upload-group"><label for="eventPhoto">Фотография для приглашения</label><input id="eventPhoto" type="file" accept="image/jpeg,image/png,image/webp"><div class="photo-upload-note">Добавь своё фото. Оно автоматически уменьшится для быстрой отправки.</div><button id="removePhoto" class="button-text remove-photo" type="button" hidden>Убрать фотографию ×</button></div>
           <div class="field-group"><label for="eventStyle">Стиль оформления</label><div class="look-gallery" id="lookGallery" aria-label="Выбор стиля оформления"><button type="button" class="look-choice active" data-theme="cream"><span class="look-swatch swatch-cream"></span>Классика</button><button type="button" class="look-choice" data-theme="wine"><span class="look-swatch swatch-wine"></span>Свадьба</button><button type="button" class="look-choice" data-theme="night"><span class="look-swatch swatch-night"></span>День рождения</button><button type="button" class="look-choice" data-theme="noir"><span class="look-swatch swatch-noir"></span>Встреча</button><button type="button" class="look-choice" data-theme="botanical"><span class="look-swatch swatch-botanical"></span>Новоселье</button><button type="button" class="look-choice" data-theme="minimal"><span class="look-swatch swatch-minimal"></span>Семейный праздник</button></div><select id="eventStyle" class="style-select" aria-label="Стиль оформления" hidden><option value="cream">Классика</option><option value="wine">Свадьба</option><option value="night">День рождения</option><option value="noir">Встреча</option><option value="botanical">Новоселье</option><option value="minimal">Семейный праздник</option></select></div><div class="field-group"><span class="field-hint style-motion-note">У каждого стиля — своя тематическая анимация. Она включается автоматически.</span></div><div class="field-group"><label>Шрифт приглашения</label><div class="font-options"><button class="font-choice active" type="button" data-font="playfair">Playfair</button><button class="font-choice" type="button" data-font="cormorant">Cormorant</button><button class="font-choice" type="button" data-font="lora">Lora</button><button class="font-choice" type="button" data-font="merriweather">Merriweather</button><button class="font-choice" type="button" data-font="cinzel">Cinzel</button><button class="font-choice" type="button" data-font="roboto-slab">Roboto Slab</button><button class="font-choice" type="button" data-font="dm-sans">DM Sans</button><button class="font-choice" type="button" data-font="montserrat">Montserrat</button><button class="font-choice" type="button" data-font="raleway">Raleway</button><button class="font-choice" type="button" data-font="oswald">Oswald</button><button class="font-choice" type="button" data-font="caveat">Caveat</button><button class="font-choice" type="button" data-font="pacifico">Pacifico</button></div><span class="field-hint">12 шрифтов — от строгой классики до рукописного стиля.</span></div>
           <div class="editor-actions">
             <button class="button button-dark export-button" id="saveInvite">Сохранить черновик</button>
@@ -94,9 +93,14 @@
             <label for="shareLink">ССЫЛКА ДЛЯ ГОСТЕЙ</label>
             <div class="share-link-row"><input id="shareLink" readonly><button id="copyInviteLink" type="button">Копировать</button></div>
             <p>Отправь эту ссылку гостям — они увидят открытку и смогут ответить.</p>
-            <label for="ownerLink" class="owner-link-label">ЛИЧНАЯ ССЫЛКА ОРГАНИЗАТОРА</label>
-            <div class="share-link-row"><input id="ownerLink" readonly><button id="copyOwnerLink" type="button">Копировать</button></div>
-            <p>Сохрани её отдельно. По ней можно открыть список ответов. Не пересылай гостям.</p>
+            <div class="organizer-dashboard-launch">
+              <a id="ownerDashboardButton" class="button button-dark organizer-dashboard-button" href="#" target="_blank" rel="noopener">Открыть кабинет организатора</a>
+              <p>В кабинете сразу доступны ответы гостей, список приглашённых и управление открыткой. Эта ссылка только для тебя — гостям её не отправляй.</p>
+            </div>
+            <details class="owner-link-details">
+              <summary>Показать и скопировать личную ссылку организатора</summary>
+              <div class="share-link-row"><input id="ownerLink" readonly><button id="copyOwnerLink" type="button">Копировать</button></div>
+            </details>
           </div>
           <div class="saved-invites" id="savedInvites">
             <div class="saved-heading">СОХРАНЁННЫЕ ЧЕРНОВИКИ <span id="savedCount">0</span></div>
@@ -119,7 +123,7 @@
           </div>
           <p class="editor-disclaimer">Черновики хранятся в этом браузере. Опубликованные приглашения и ответы гостей хранятся онлайн до удаления. Ответы доступны по личной ссылке организатора.</p>
         </div>
-        <div class="preview-side"><div class="preview-label"><span class="live-dot"></span> ЖИВОЙ ПРЕДПРОСМОТР <span>ПРЕДПРОСМОТР</span></div><div class="preview-stage"><article class="live-invite theme-cream" id="liveInvite"><div class="scene-effects" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><img id="previewPhoto" class="preview-photo" alt="Фотография для приглашения" hidden><div class="live-symbol"></div><h3 id="previewTitle">Буду рад тебя видеть!</h3><p id="previewText">Есть повод собраться и провести этот день вместе. Очень хочу разделить его с тобой!</p><div class="live-separator"></div><div class="live-meta"><span id="previewDate">ДАТА БУДЕТ ЗДЕСЬ</span><span id="previewTime">18:00</span><span id="previewPlace">МЕСТО ВСТРЕЧИ</span></div><div class="live-footer">С НЕТЕРПЕНИЕМ ЖДУ ТЕБЯ</div></article></div>
+        <div class="preview-side"><div class="preview-label"><span class="live-dot"></span> ЖИВОЙ ПРЕДПРОСМОТР <span>ПРЕДПРОСМОТР</span></div><div class="preview-stage"><article class="live-invite theme-cream" id="liveInvite"><div class="scene-effects" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="live-symbol"></div><h3 id="previewTitle">Буду рад тебя видеть!</h3><p id="previewText">Есть повод собраться и провести этот день вместе. Очень хочу разделить его с тобой!</p><div class="live-separator"></div><div class="live-meta"><span id="previewDate">ДАТА БУДЕТ ЗДЕСЬ</span><span id="previewTime">18:00</span><span id="previewPlace">МЕСТО ВСТРЕЧИ</span></div><div class="live-footer">С НЕТЕРПЕНИЕМ ЖДУ ТЕБЯ</div></article></div>
           <div class="guest-rsvp" id="guestRsvp" hidden>
             <div class="guest-rsvp-kicker">БУДЕМ РАДЫ ТВОЕМУ ОТВЕТУ</div>
             <h3>Ты будешь?</h3>
