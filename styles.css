@@ -277,3 +277,46 @@ body{background:#101010;color:#f0ede7}
 .template-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:58px}
 @media(max-width:800px){.template-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}}
 @media(max-width:480px){.template-grid{grid-template-columns:1fr;gap:15px}.template-visual{min-height:220px}.template-card{max-width:420px;width:100%;margin-inline:auto}}
+
+
+/* Тематические анимации открыток — работают без отдельного переключателя */
+.scene-effects{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;contain:paint}
+.scene-effects i{position:absolute;display:block;opacity:0;pointer-events:none}
+.live-invite>*:not(.scene-effects),main>*:not(.scene-effects){position:relative;z-index:1}
+.scene-effects i:nth-child(1){left:9%;top:18%;animation-delay:-.7s}
+.scene-effects i:nth-child(2){left:78%;top:13%;animation-delay:-2.4s}
+.scene-effects i:nth-child(3){left:18%;top:74%;animation-delay:-1.6s}
+.scene-effects i:nth-child(4){left:86%;top:68%;animation-delay:-3.1s}
+.scene-effects i:nth-child(5){left:48%;top:8%;animation-delay:-2s}
+.scene-effects i:nth-child(6){left:63%;top:84%;animation-delay:-.2s}
+.scene-effects i:nth-child(7){left:31%;top:43%;animation-delay:-2.8s}
+.scene-effects i:nth-child(8){left:92%;top:42%;animation-delay:-1.2s}
+.scene-effects i:nth-child(9){left:6%;top:53%;animation-delay:-3.6s}
+.scene-effects i:nth-child(10){left:55%;top:61%;animation-delay:-1.9s}
+/* Свадьба — медленно плывущие лепестки и мягкие блики */
+.scene-wine .scene-effects i{width:9px;height:13px;border-radius:90% 0 90% 0;background:linear-gradient(145deg,#fff8e8,#c9a77b);box-shadow:0 0 10px #f6dfb777;animation:petal-drift 8s ease-in-out infinite}
+.scene-wine .scene-effects i:nth-child(2n){width:6px;height:9px;animation-duration:10s}
+/* День рождения — конфетти и золотые искры */
+.scene-night .scene-effects i{width:5px;height:13px;border-radius:2px;background:#e4bd79;box-shadow:0 0 9px #e4bd7988;animation:confetti-drop 5.5s ease-in-out infinite}
+.scene-night .scene-effects i:nth-child(3n){width:7px;height:7px;border-radius:50%;background:#f4e4c3;animation-name:confetti-pop;animation-duration:3.8s}
+.scene-night .scene-effects i:nth-child(2n){background:#c58f9a}
+/* Встреча — мягкие огни, будто вечерний город */
+.scene-noir .scene-effects i{width:22px;height:22px;border-radius:50%;background:#d8c49c;filter:blur(8px);animation:city-bokeh 6s ease-in-out infinite}
+.scene-noir .scene-effects i:nth-child(2n){width:12px;height:12px;background:#b4c3c7;animation-duration:8s}
+/* Новоселье — тёплые световые пылинки */
+.scene-botanical .scene-effects i{width:5px;height:5px;border-radius:50%;background:#fff3c9;box-shadow:0 0 12px 3px #e9d39b99;animation:home-glow 6s ease-in-out infinite}
+.scene-botanical .scene-effects i:nth-child(2n){width:3px;height:3px;animation-duration:8s}
+/* Семейный праздник — тонкие золотые блики */
+.scene-minimal .scene-effects i{width:42%;height:1px;left:29%;top:25%;background:linear-gradient(90deg,transparent,#d6b77e,transparent);animation:gold-sheen 6s ease-in-out infinite}
+.scene-minimal .scene-effects i:nth-child(2n){top:75%;animation-delay:-3s}
+/* Классика — едва заметные жемчужные частицы */
+.scene-cream .scene-effects i{width:4px;height:4px;border-radius:50%;background:#ead5b5;box-shadow:0 0 8px #ead5b5;animation:classic-drift 7s ease-in-out infinite}
+@keyframes petal-drift{0%{transform:translate3d(0,-20px,0) rotate(-35deg);opacity:0}18%{opacity:.75}82%{opacity:.55}100%{transform:translate3d(20px,340px,0) rotate(170deg);opacity:0}}
+@keyframes confetti-drop{0%{transform:translate3d(0,-30px,0) rotate(0);opacity:0}12%{opacity:.9}85%{opacity:.8}100%{transform:translate3d(15px,420px,0) rotate(420deg);opacity:0}}
+@keyframes confetti-pop{0%,100%{transform:scale(.4);opacity:0}30%,70%{transform:scale(1.5);opacity:.9}}
+@keyframes city-bokeh{0%,100%{transform:scale(.5);opacity:.12}50%{transform:scale(1.5);opacity:.6}}
+@keyframes home-glow{0%,100%{transform:translate3d(0,10px,0) scale(.5);opacity:.15}50%{transform:translate3d(8px,-18px,0) scale(1.3);opacity:.9}}
+@keyframes gold-sheen{0%,100%{transform:translateX(-18px);opacity:0}45%,60%{transform:translateX(18px);opacity:.55}}
+@keyframes classic-drift{0%,100%{transform:translateY(12px);opacity:.12}50%{transform:translateY(-16px);opacity:.65}}
+.style-motion-note{display:block;padding:10px 12px;border-left:2px solid #b79a72;background:#1b1916;color:#bdb09d;line-height:1.6}
+@media(prefers-reduced-motion:reduce){.scene-effects,.scene-effects i{animation:none!important;opacity:.22!important}}
