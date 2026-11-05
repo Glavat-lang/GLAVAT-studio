@@ -39,7 +39,11 @@ jobs:
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: |
+            index.html
+            app.js
+            styles.css
+            .nojekyll
   deploy:
     environment:
       name: github-pages
