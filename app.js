@@ -306,7 +306,12 @@ document.querySelectorAll(".font-choice").forEach((button) => {
   }
 
   function saveManagedInvites(items) {
-    localStorage.setItem(MANAGED_KEY, JSON.stringify(items.slice(0, 50)));
+    try {
+      localStorage.setItem(MANAGED_KEY, JSON.stringify(items.slice(0, 50)));
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 
   function renderManagedInvites() {
